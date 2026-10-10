@@ -64,6 +64,12 @@ export default function Login() {
             placeholder="••••••••"
           />
           <Button label="Sign In with Email" onPress={submit} loading={loading} fullWidth />
+          <Link
+            href="/(auth)/forgot-password"
+            style={{ color: colors.muted, fontSize: font.sm, textAlign: 'right', marginTop: spacing(3) }}
+          >
+            Forgot password?
+          </Link>
           <View style={{ flexDirection: 'row', justifyContent: 'center', marginTop: spacing(4) }}>
             <Text style={{ color: colors.muted }}>Don't have an account? </Text>
             <Link href="/(auth)/register" style={{ color: colors.primary400, fontWeight: '700' }}>

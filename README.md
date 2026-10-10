@@ -209,15 +209,36 @@ It type-checks clean, passes all 21 `expo-doctor` checks, and bundles
 successfully via Metro (1,315 modules). See [`mobile/README.md`](mobile/README.md)
 for running and EAS store-build instructions. App bundle ids: `in.nokkoo.ero`.
 
+## Auth hardening & CI (Phase 5 — delivered)
+
+- **Password reset** (`POST /auth/forgot-password`, `POST /auth/reset-password`) —
+  token-based, works for web + mobile; forgot-password returns a generic message
+  so registered emails can't be enumerated; a successful reset revokes all the
+  user's API tokens. Web pages at `/forgot-password` and `/reset-password`, plus
+  a mobile screen; a "Forgot password?" link on both sign-in screens.
+- **Email verification** — `User` implements `MustVerifyEmail`; registration
+  fires the verification email, with authenticated `GET /auth/email/status`,
+  `POST /auth/email/resend`, and a signature-protected
+  `GET /auth/verify-email/{id}/{hash}` link target. `email_verified` is included
+  in the auth payload.
+- **CI** — `.github/workflows/ci.yml` runs on every push/PR to `main`: backend
+  Laravel test suite (PHP 8.3, SQLite), web type-check + build, and mobile
+  `tsc --noEmit`.
+
+Covered by `backend/tests/Feature/AuthHardeningTest.php`. **33 passing tests total.**
+
+> Email delivery: on shared hosting without SMTP the notifications use the `log`
+> mailer by default. Configure a real mailer in `.env` (`MAIL_*`) for production.
+
 ## Roadmap
 
 Delivered: auth, data model, exam engine, student web app, design system, cPanel
 deployment, admin console + question import, student analytics + daily practice,
-and the **React Native mobile app** (Phase 4). 26 backend tests passing; web +
-mobile type-check clean.
+the React Native mobile app, and **password reset + email verification + CI**
+(Phase 5). 33 backend tests passing; web + mobile type-check clean.
 
-Next phases (scoped, not yet built):
+Next (optional):
 1. FMGE level-mock (Day-31 300-question) runtime UI on top of the exam engine.
-2. Email verification + password reset flows, push notifications.
-3. CI pipeline; EAS production store submissions.
+2. Push notifications; configure a production mailer.
+3. EAS production store submissions.
 ```

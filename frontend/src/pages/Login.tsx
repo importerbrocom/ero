@@ -66,6 +66,11 @@ export default function Login() {
               <Mail className="h-4 w-4" />
               Sign In with Email
             </Button>
+            <p className="text-right text-sm">
+              <Link to="/forgot-password" className="text-ero-muted hover:text-ero-primary-400">
+                Forgot password?
+              </Link>
+            </p>
           </form>
           <p className="text-center text-sm text-ero-muted">
             Don't have an account?{' '}

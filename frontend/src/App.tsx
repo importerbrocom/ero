@@ -10,6 +10,8 @@ import { useAuth } from './store/auth'
 import { AppShell } from './components/AppShell'
 import Login from './pages/Login'
 import Register from './pages/Register'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 import Dashboard from './pages/Dashboard'
 import ChooseExam from './pages/ChooseExam'
 import ProgrammeDetail from './pages/ProgrammeDetail'
@@ -74,6 +76,8 @@ export default function App() {
       <Routes>
         <Route path="/login" element={user ? <Navigate to="/app" replace /> : <Login />} />
         <Route path="/register" element={user ? <Navigate to="/app" replace /> : <Register />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
 
         <Route
           path="/app"

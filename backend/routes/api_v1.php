@@ -5,6 +5,8 @@ use App\Http\Controllers\Api\V1\Admin;
 use App\Http\Controllers\Api\V1\AnalyticsController;
 use App\Http\Controllers\Api\V1\AttemptController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\EmailVerificationController;
+use App\Http\Controllers\Api\V1\PasswordResetController;
 use App\Http\Controllers\Api\V1\PracticeController;
 use App\Http\Controllers\Api\V1\ProgrammeController;
 use Illuminate\Support\Facades\Route;
@@ -19,6 +21,15 @@ use Illuminate\Support\Facades\Route;
 Route::post('/auth/register', [AuthController::class, 'register']);
 Route::post('/auth/login', [AuthController::class, 'login']);
 
+// --- Password reset (public) ---
+Route::post('/auth/forgot-password', [PasswordResetController::class, 'forgot']);
+Route::post('/auth/reset-password', [PasswordResetController::class, 'reset']);
+
+// --- Email verification: signed link target (public, signature-protected) ---
+Route::get('/auth/verify-email/{id}/{hash}', [EmailVerificationController::class, 'verify'])
+    ->middleware('signed')
+    ->name('verification.verify');
+
 // --- Public programme browsing (reads has_access when authenticated) ---
 Route::get('/programmes', [ProgrammeController::class, 'index']);
 Route::get('/programmes/{programme}', [ProgrammeController::class, 'show']);
@@ -27,6 +38,10 @@ Route::get('/programmes/{programme}', [ProgrammeController::class, 'show']);
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
     Route::post('/auth/logout', [AuthController::class, 'logout']);
+
+    // Email verification (authenticated)
+    Route::get('/auth/email/status', [EmailVerificationController::class, 'status']);
+    Route::post('/auth/email/resend', [EmailVerificationController::class, 'resend']);
 
     // Activation codes
     Route::post('/activation/redeem', [ActivationController::class, 'redeem']);
