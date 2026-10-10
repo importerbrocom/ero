@@ -15,7 +15,11 @@ import ChooseExam from './pages/ChooseExam'
 import ProgrammeDetail from './pages/ProgrammeDetail'
 import ExamInstructions from './pages/ExamInstructions'
 import ExamRunner from './pages/ExamRunner'
-import { ProfilePage, ProgressPage, SupportPage, TestsPage } from './pages/misc'
+import Progress from './pages/Progress'
+import Tests from './pages/Tests'
+import DailyPractice from './pages/DailyPractice'
+import PracticeDayRunner from './pages/PracticeDayRunner'
+import { ProfilePage, SupportPage } from './pages/misc'
 import { AdminShell } from './components/AdminShell'
 import AdminOverview from './pages/admin/AdminOverview'
 import AdminStudents from './pages/admin/AdminStudents'
@@ -84,8 +88,11 @@ export default function App() {
           <Route path="programmes/:slug" element={<ProgrammeDetail />} />
           <Route path="exams/:examId/instructions" element={<ExamInstructions />} />
           <Route path="attempts/:attemptId" element={<ExamRunner />} />
-          <Route path="tests" element={<TestsPage />} />
-          <Route path="progress" element={<ProgressPage />} />
+          <Route path="exams/:examId/practice" element={<DailyPractice />} />
+          <Route path="practice/:enrollmentId" element={<DailyPractice />} />
+          <Route path="practice/:enrollmentId/day/:day" element={<PracticeDayRunner />} />
+          <Route path="tests" element={<Tests />} />
+          <Route path="progress" element={<Progress />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="support" element={<SupportPage />} />
         </Route>

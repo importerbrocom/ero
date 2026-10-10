@@ -71,3 +71,50 @@ export async function submitBlock(
   )
   return data.data
 }
+
+// ---- Phase 3: analytics + daily practice ----
+import type {
+  AnalyticsOverview,
+  AttemptHistoryItem,
+  PracticeDay,
+  PracticePlan,
+} from '../types'
+
+export async function fetchAnalytics(programmeId?: number): Promise<AnalyticsOverview> {
+  const { data } = await api.get('/analytics/overview', {
+    params: programmeId ? { programme_id: programmeId } : undefined,
+  })
+  return data.data
+}
+
+export async function fetchAttemptHistory(): Promise<{
+  data: AttemptHistoryItem[]
+  meta: { current_page: number; last_page: number; total: number }
+}> {
+  const { data } = await api.get('/analytics/attempts')
+  return data
+}
+
+export async function enrollPractice(examId: number): Promise<PracticePlan> {
+  const { data } = await api.post(`/exams/${examId}/practice/enroll`)
+  return data.data
+}
+
+export async function fetchPracticePlan(enrollmentId: number): Promise<PracticePlan> {
+  const { data } = await api.get(`/practice/${enrollmentId}`)
+  return data.data
+}
+
+export async function fetchPracticeDay(enrollmentId: number, day: number): Promise<PracticeDay> {
+  const { data } = await api.get(`/practice/${enrollmentId}/days/${day}`)
+  return data.data
+}
+
+export async function submitPracticeDay(
+  enrollmentId: number,
+  dayId: number,
+  responses: Record<number, number>,
+): Promise<{ data: PracticeDay; enrollment: PracticePlan }> {
+  const { data } = await api.post(`/practice/${enrollmentId}/days/${dayId}/submit`, { responses })
+  return data
+}

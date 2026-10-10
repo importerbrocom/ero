@@ -10,21 +10,23 @@ import {
   ClipboardList,
   FileText,
 } from 'lucide-react'
-import { fetchProgrammes } from '../lib/queries'
-import type { Programme } from '../types'
+import { fetchAnalytics, fetchProgrammes } from '../lib/queries'
+import type { AnalyticsOverview, Programme } from '../types'
 import { Button, Card, EmptyState, KpiChip, ProgressRing, Skeleton } from '../components/ui'
 import { useAuth } from '../store/auth'
 
 export default function Dashboard() {
   const user = useAuth((s) => s.user)
   const [programmes, setProgrammes] = useState<Programme[] | null>(null)
+  const [analytics, setAnalytics] = useState<AnalyticsOverview | null>(null)
 
   useEffect(() => {
     fetchProgrammes().then(setProgrammes)
+    fetchAnalytics().then(setAnalytics).catch(() => setAnalytics(null))
   }, [])
 
   const accessible = programmes?.filter((p) => p.has_access) ?? []
-  const hasStarted = false // real stats would come from a progress endpoint
+  const hasStarted = analytics?.has_activity ?? false
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
@@ -57,14 +59,14 @@ export default function Dashboard() {
       {/* Overall progress — honest empty state for a new student (no fake stats) */}
       <Card>
         <h2 className="mb-4 text-lg font-bold">Overall Progress</h2>
-        {hasStarted ? (
+        {hasStarted && analytics ? (
           <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
             <div className="flex items-center justify-center">
-              <ProgressRing value={0} label="Accuracy" />
+              <ProgressRing value={analytics.overall_accuracy} label="Accuracy" />
             </div>
-            <KpiChip icon={<ClipboardList className="h-6 w-6" />} value={0} label="Attempted" />
-            <KpiChip icon={<CheckCircle2 className="h-6 w-6" />} value={0} label="Correct" tone="success" />
-            <KpiChip icon={<XCircle className="h-6 w-6" />} value={0} label="Incorrect" tone="danger" />
+            <KpiChip icon={<ClipboardList className="h-6 w-6" />} value={analytics.questions_attempted} label="Attempted" />
+            <KpiChip icon={<CheckCircle2 className="h-6 w-6" />} value={analytics.correct} label="Correct" tone="success" />
+            <KpiChip icon={<XCircle className="h-6 w-6" />} value={analytics.incorrect} label="Incorrect" tone="danger" />
           </div>
         ) : (
           <EmptyState
@@ -128,9 +130,9 @@ export default function Dashboard() {
 
       {/* Streak strip */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <KpiChip icon={<Flame className="h-6 w-6" />} value={0} label="Current Streak" tone="streak" />
-        <KpiChip icon={<CheckCircle2 className="h-6 w-6" />} value={0} label="Days Completed" tone="success" />
-        <KpiChip icon={<ClipboardList className="h-6 w-6" />} value={0} label="Questions Answered" />
+        <KpiChip icon={<Flame className="h-6 w-6" />} value={analytics?.current_streak ?? 0} label="Current Streak" tone="streak" />
+        <KpiChip icon={<CheckCircle2 className="h-6 w-6" />} value={analytics?.days_completed ?? 0} label="Days Completed" tone="success" />
+        <KpiChip icon={<ClipboardList className="h-6 w-6" />} value={analytics?.questions_attempted ?? 0} label="Questions Answered" />
         <KpiChip icon={<FileText className="h-6 w-6" />} value={accessible.length} label="Programmes" />
       </div>
     </div>

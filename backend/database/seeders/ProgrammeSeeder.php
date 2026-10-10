@@ -115,7 +115,7 @@ class ProgrammeSeeder extends Seeder
             'sort_order' => 1,
         ]);
 
-        $this->seedSubjects($programme, [
+        $subjects = $this->seedSubjects($programme, [
             ['Anatomy', 'heart', '#EF4444'],
             ['Physiology', 'activity', '#3B82F6'],
             ['Biochemistry', 'flask-conical', '#10B981'],
@@ -126,6 +126,35 @@ class ProgrammeSeeder extends Seeder
             ['Surgery', 'scalpel', '#14B8A6'],
             ['Community Medicine', 'users', '#F97316'],
         ]);
+
+        $author = User::where('role', User::ROLE_ADMIN)->first();
+
+        // Seed a modest active question bank so daily practice has questions to draw.
+        if ($programme->questions()->count() === 0) {
+            for ($i = 1; $i <= 120; $i++) {
+                $this->makeQuestion($programme, $subjects->random(), $author, "FMGE Bank Q{$i}");
+            }
+        }
+
+        // Daily-practice plan: 14 days × 10 questions (configurable; §6).
+        Exam::updateOrCreate(
+            ['exam_programme_id' => $programme->id, 'type' => Exam::TYPE_DAILY_PRACTICE],
+            [
+                'title' => 'FMGE Daily Practice',
+                'description' => '10 questions every day. Build your streak and track accuracy.',
+                'block_count' => 1,
+                'questions_per_block' => 10,
+                'block_duration_minutes' => 15,
+                'block_release_interval_minutes' => 0,
+                'plan_days' => 14,
+                'questions_per_day' => 10,
+                'timer_enabled' => false,
+                'allow_retry' => true,
+                'result_visibility' => 'immediate', // practice reveals explanations
+                'randomize_options' => true,
+                'status' => 'published',
+            ]
+        );
 
         return $programme;
     }

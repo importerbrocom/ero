@@ -130,3 +130,87 @@ export interface ExamQuestion {
   key_points?: string[]
   high_yield_fact?: string
 }
+
+// ---- Phase 3: analytics + daily practice ----
+
+export interface AnalyticsOverview {
+  overall_accuracy: number
+  questions_attempted: number
+  questions_total: number
+  correct: number
+  incorrect: number
+  mock_attempts: number
+  current_streak: number
+  best_streak: number
+  days_completed: number
+  subject_accuracy: { subject: string; total: number; correct: number; accuracy: number }[]
+  topic_accuracy: { topic: string; total: number; correct: number; accuracy: number }[]
+  accuracy_trend: { label: string; date: string; accuracy: number; kind: 'mock' | 'practice'; title: string }[]
+  mock_scores: { title: string; accuracy: number; completed_at: string | null }[]
+  has_activity: boolean
+}
+
+export interface AttemptHistoryItem {
+  id: number
+  exam_title: string
+  exam_type: string
+  programme: string | null
+  flag_emoji: string | null
+  status: string
+  accuracy: number | null
+  correct_count: number
+  total_questions: number
+  started_at: string | null
+  completed_at: string | null
+}
+
+export type PracticeDayStatus = 'locked' | 'available' | 'pending' | 'completed'
+
+export interface PracticePlan {
+  enrollment_id: number
+  exam_id: number
+  title: string
+  plan_days: number
+  questions_per_day: number
+  timer_enabled: boolean
+  allow_retry: boolean
+  current_day: number
+  streak: number
+  best_streak: number
+  last_completed_date: string | null
+  completed_days: number
+  schedule: {
+    day_number: number
+    status: PracticeDayStatus
+    accuracy: number | null
+    correct_count: number | null
+    answered_count: number | null
+    completed_at: string | null
+  }[]
+}
+
+export interface PracticeQuestion {
+  question_id: number
+  display_position: number
+  stem: string
+  image_url: string | null
+  subject: string | null
+  topic: string | null
+  difficulty: string
+  options: ExamOption[]
+  selected_option_id: number | null
+  explanation?: string
+  key_points?: string[]
+  high_yield_fact?: string
+}
+
+export interface PracticeDay {
+  id: number
+  day_number: number
+  status: 'pending' | 'completed'
+  timer_enabled: boolean
+  correct_count: number | null
+  answered_count: number | null
+  accuracy: number | null
+  questions: PracticeQuestion[]
+}

@@ -95,7 +95,15 @@ export default function ProgrammeDetail() {
               </div>
               <div className="shrink-0">
                 {programme.has_access ? (
-                  <Button onClick={() => navigate(`/app/exams/${exam.id}/instructions`)}>
+                  <Button
+                    onClick={() =>
+                      navigate(
+                        exam.type === 'daily_practice'
+                          ? `/app/exams/${exam.id}/practice`
+                          : `/app/exams/${exam.id}/instructions`,
+                      )
+                    }
+                  >
                     Start <ArrowRight className="h-4 w-4" />
                   </Button>
                 ) : (

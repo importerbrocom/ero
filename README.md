@@ -175,15 +175,35 @@ creation mapping, code batches, and the CSV import validate→commit cycle).
 Sign in as `admin@ero.test` / `super@ero.test` (password `password`) and the
 "Admin Console" link appears in the sidebar.
 
+## Student analytics & daily practice (Phase 3 — delivered)
+
+- **Analytics API** (`/api/v1/analytics/overview`, `/analytics/attempts`) — derives
+  overall accuracy, questions attempted/correct/incorrect, accuracy trend,
+  subject & topic breakdowns, mock-test scores and streaks **from the student's
+  own completed attempts and practice days** (never fabricated; honest empty
+  state for new students).
+- **Progress dashboard** (screenshot 12) — accuracy ring, KPI chips, accuracy
+  trend area chart, subject-wise accuracy bars, mock-test performance bars.
+- **My Tests** — real attempt history with scores and resume/review links.
+- **Daily-practice runtime** (`PracticeEngine` + `/api/v1/practice/*`) — enroll in
+  a plan (e.g. FMGE 14×10), per-day quizzes with server-stored shuffled questions
+  & options, day-locking/unlocking, streak tracking, and immediate feedback
+  (correct/incorrect + explanation + key points + high-yield fact, screenshot 6).
+  Kept separate from mock history (§5.9) so neither overwrites the other.
+
+Covered by `backend/tests/Feature/PracticeAndAnalyticsTest.php` (day building,
+answer-key hiding, day locking, grading+streak+unlock, no in-plan repeats,
+analytics aggregation + empty state). **26 passing tests total.**
+
 ## Roadmap
 
 Delivered: auth, data model, exam engine, student web app, design system, cPanel
-deployment, and the **admin console + question import** (Phase 2). 20 passing tests.
+deployment, admin console + question import, and **student analytics + daily
+practice** (Phase 3). 26 passing tests.
 
 Next phases (scoped, not yet built):
-1. Student analytics dashboards (accuracy trend, subject/topic, streaks, ranks).
-2. FMGE daily-practice & level-mock runtime UI.
-3. React Native (Expo) mobile app sharing the API contract in `frontend/src/types.ts`.
-4. Email verification + password reset flows, notifications.
-5. CI, deployment config, app-store readiness.
+1. FMGE level-mock (Day-31 300-question) runtime UI on top of the exam engine.
+2. React Native (Expo) mobile app sharing the API contract in `frontend/src/types.ts`.
+3. Email verification + password reset flows, notifications.
+4. CI, deployment config, app-store readiness.
 ```

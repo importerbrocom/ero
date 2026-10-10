@@ -2,8 +2,10 @@
 
 use App\Http\Controllers\Api\V1\ActivationController;
 use App\Http\Controllers\Api\V1\Admin;
+use App\Http\Controllers\Api\V1\AnalyticsController;
 use App\Http\Controllers\Api\V1\AttemptController;
 use App\Http\Controllers\Api\V1\AuthController;
+use App\Http\Controllers\Api\V1\PracticeController;
 use App\Http\Controllers\Api\V1\ProgrammeController;
 use Illuminate\Support\Facades\Route;
 
@@ -36,6 +38,16 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('/attempts/{attempt}/blocks/{block}/questions', [AttemptController::class, 'blockQuestions']);
     Route::post('/attempts/{attempt}/blocks/{block}/answer', [AttemptController::class, 'answer']);
     Route::post('/attempts/{attempt}/blocks/{block}/submit', [AttemptController::class, 'submitBlock']);
+
+    // Daily practice runtime (§5.9 / §6)
+    Route::post('/exams/{exam}/practice/enroll', [PracticeController::class, 'enroll']);
+    Route::get('/practice/{enrollment}', [PracticeController::class, 'show']);
+    Route::get('/practice/{enrollment}/days/{day}', [PracticeController::class, 'day']);
+    Route::post('/practice/{enrollment}/days/{day}/submit', [PracticeController::class, 'submitDay']);
+
+    // Student analytics (screenshot 12)
+    Route::get('/analytics/overview', [AnalyticsController::class, 'overview']);
+    Route::get('/analytics/attempts', [AnalyticsController::class, 'attempts']);
 });
 
 /*
