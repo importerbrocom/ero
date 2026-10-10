@@ -195,15 +195,29 @@ Covered by `backend/tests/Feature/PracticeAndAnalyticsTest.php` (day building,
 answer-key hiding, day locking, grading+streak+unlock, no in-plan repeats,
 analytics aggregation + empty state). **26 passing tests total.**
 
+## Mobile app (Phase 4 — delivered)
+
+A cross-platform **React Native + Expo** app lives in [`mobile/`](mobile/)
+(Expo SDK 57, Expo Router, TypeScript). It shares the exact REST API contract
+with the web app, so business rules stay on the backend. Implemented: auth
+(token in AsyncStorage), bottom-tab navigation, home dashboard, choose-exam +
+activation-code redemption, programme detail, the **mock exam runner**
+(server-authoritative timers, auto-submit, results), the **daily-practice**
+plan + day runner (immediate feedback), and the progress/analytics screen.
+
+It type-checks clean, passes all 21 `expo-doctor` checks, and bundles
+successfully via Metro (1,315 modules). See [`mobile/README.md`](mobile/README.md)
+for running and EAS store-build instructions. App bundle ids: `in.nokkoo.ero`.
+
 ## Roadmap
 
 Delivered: auth, data model, exam engine, student web app, design system, cPanel
-deployment, admin console + question import, and **student analytics + daily
-practice** (Phase 3). 26 passing tests.
+deployment, admin console + question import, student analytics + daily practice,
+and the **React Native mobile app** (Phase 4). 26 backend tests passing; web +
+mobile type-check clean.
 
 Next phases (scoped, not yet built):
 1. FMGE level-mock (Day-31 300-question) runtime UI on top of the exam engine.
-2. React Native (Expo) mobile app sharing the API contract in `frontend/src/types.ts`.
-3. Email verification + password reset flows, notifications.
-4. CI, deployment config, app-store readiness.
+2. Email verification + password reset flows, push notifications.
+3. CI pipeline; EAS production store submissions.
 ```
