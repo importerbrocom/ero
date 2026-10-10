@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
 use App\Models\User;
+use Illuminate\Auth\Events\Registered;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
@@ -26,6 +27,10 @@ class AuthController extends Controller
             'country' => $data['country'] ?? null,
             'role' => User::ROLE_STUDENT, // registration always creates students
         ]);
+
+        // Fire the Registered event so Laravel sends the verification email.
+        // (On a host without SMTP configured this writes to the log mailer.)
+        event(new Registered($user));
 
         $token = $user->createToken('web')->plainTextToken;
 
@@ -86,6 +91,7 @@ class AuthController extends Controller
             'role' => $user->role,
             'country' => $user->country,
             'avatar_url' => $user->avatar_url,
+            'email_verified' => $user->hasVerifiedEmail(),
         ];
     }
 }

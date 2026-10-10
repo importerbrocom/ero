@@ -40,4 +40,13 @@ class ExamProgramme extends Model
     {
         return ProgrammeConfig::fromArray($this->config);
     }
+
+    /**
+     * Programmes are addressed by slug in the frontend (/programmes/fmge), so
+     * route-model binding resolves on slug rather than the numeric id.
+     */
+    public function getRouteKeyName(): string
+    {
+        return 'slug';
+    }
 }

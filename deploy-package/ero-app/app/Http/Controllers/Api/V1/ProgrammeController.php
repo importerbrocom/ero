@@ -51,6 +51,9 @@ class ProgrammeController extends Controller
                     'questions_per_block' => $e->questions_per_block,
                     'total_questions' => $e->totalQuestions(),
                     'block_duration_minutes' => $e->block_duration_minutes,
+                    'plan_days' => $e->plan_days,
+                    'questions_per_day' => $e->questions_per_day,
+                    'timer_enabled' => $e->timer_enabled,
                 ]),
             ]),
         ]);

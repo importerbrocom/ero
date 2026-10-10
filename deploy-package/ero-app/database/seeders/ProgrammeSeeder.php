@@ -115,7 +115,7 @@ class ProgrammeSeeder extends Seeder
             'sort_order' => 1,
         ]);
 
-        $this->seedSubjects($programme, [
+        $subjects = $this->seedSubjects($programme, [
             ['Anatomy', 'heart', '#EF4444'],
             ['Physiology', 'activity', '#3B82F6'],
             ['Biochemistry', 'flask-conical', '#10B981'],
@@ -127,7 +127,89 @@ class ProgrammeSeeder extends Seeder
             ['Community Medicine', 'users', '#F97316'],
         ]);
 
+        $author = User::where('role', User::ROLE_ADMIN)->first();
+
+        // Seed an active question bank for daily practice + level mocks.
+        // (A demo-sized bank; real content is added by admins via CSV/XLSX import.)
+        $bankTarget = 300;
+        $have = $programme->questions()->count();
+        for ($i = $have + 1; $i <= $bankTarget; $i++) {
+            $this->makeQuestion($programme, $subjects->random(), $author, "FMGE Bank Q{$i}");
+        }
+
+        // Daily-practice plan: 14 days × 10 questions (configurable; §6).
+        Exam::updateOrCreate(
+            ['exam_programme_id' => $programme->id, 'type' => Exam::TYPE_DAILY_PRACTICE],
+            [
+                'title' => 'FMGE Daily Practice',
+                'description' => '10 questions every day. Build your streak and track accuracy.',
+                'block_count' => 1,
+                'questions_per_block' => 10,
+                'block_duration_minutes' => 15,
+                'block_release_interval_minutes' => 0,
+                'plan_days' => 14,
+                'questions_per_day' => 10,
+                'timer_enabled' => false,
+                'allow_retry' => true,
+                'result_visibility' => 'immediate', // practice reveals explanations
+                'randomize_options' => true,
+                'status' => 'published',
+            ]
+        );
+
+        $this->seedFmgeLevelMocks($programme, $author);
+
         return $programme;
+    }
+
+    /**
+     * §6 — six level mocks. The real size is 300 questions (configurable); the
+     * seed builds a demo-sized 50-question mock per level so all six are
+     * playable without generating 1,800 rows. Admins resize/populate via import.
+     */
+    private function seedFmgeLevelMocks(ExamProgramme $programme, User $author): void
+    {
+        $config = $programme->configuration();
+        $levels = (int) $config->get('levels', 6);
+        $durationPerLevel = (int) $config->get('level_mock_duration_minutes', 180);
+        $demoSize = 50;
+
+        $bank = $programme->questions()->where('status', 'active')->pluck('id')->all();
+
+        for ($lvl = 1; $lvl <= $levels; $lvl++) {
+            $exam = Exam::updateOrCreate(
+                ['exam_programme_id' => $programme->id, 'type' => Exam::TYPE_LEVEL_MOCK, 'level' => $lvl],
+                [
+                    'title' => "FMGE Level {$lvl} Mock",
+                    'description' => "Full-length level {$lvl} mock. Pass to unlock the next level.",
+                    'block_count' => 1,
+                    'questions_per_block' => $demoSize,
+                    'block_duration_minutes' => $durationPerLevel,
+                    'block_release_interval_minutes' => 0,
+                    'randomize_questions' => true,
+                    'randomize_options' => true,
+                    'allow_retry' => true,
+                    'result_visibility' => 'after_exam',
+                    'status' => 'published',
+                ]
+            );
+
+            if ($exam->blocks()->count() === 0 && count($bank) >= $demoSize) {
+                $block = ExamBlock::create([
+                    'exam_id' => $exam->id,
+                    'logical_number' => 1,
+                    'label' => "Level {$lvl}",
+                ]);
+                // Draw a distinct 50-question slice per level where the bank allows.
+                $offset = (($lvl - 1) * $demoSize) % max(1, count($bank) - $demoSize + 1);
+                $slice = array_slice($bank, $offset, $demoSize);
+                $attach = [];
+                foreach ($slice as $pos => $qid) {
+                    $attach[$qid] = ['canonical_position' => $pos + 1];
+                }
+                $block->questions()->attach($attach);
+            }
+        }
     }
 
     private function seedSubjects(ExamProgramme $programme, array $defs)
