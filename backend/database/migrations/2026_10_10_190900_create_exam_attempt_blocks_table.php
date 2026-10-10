@@ -30,8 +30,9 @@ return new class extends Migration
             $table->unsignedInteger('answered_count')->default(0);
             $table->timestamps();
 
-            $table->unique(['exam_attempt_id', 'exam_block_id']);
-            $table->unique(['exam_attempt_id', 'display_position']);
+            // Explicit short index names — MySQL caps identifiers at 64 chars.
+            $table->unique(['exam_attempt_id', 'exam_block_id'], 'eab_attempt_block_unique');
+            $table->unique(['exam_attempt_id', 'display_position'], 'eab_attempt_position_unique');
         });
     }
 

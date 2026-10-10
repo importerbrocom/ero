@@ -29,8 +29,9 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unique(['exam_attempt_block_id', 'question_id']);
-            $table->unique(['exam_attempt_block_id', 'display_position']);
+            // Explicit short index names — MySQL caps identifiers at 64 chars.
+            $table->unique(['exam_attempt_block_id', 'question_id'], 'eaq_block_question_unique');
+            $table->unique(['exam_attempt_block_id', 'display_position'], 'eaq_block_position_unique');
         });
     }
 

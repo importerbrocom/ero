@@ -34,7 +34,7 @@ return new class extends Migration
 
             $table->timestamps();
 
-            $table->unique(['user_id', 'exam_id', 'attempt_number']);
+            $table->unique(['user_id', 'exam_id', 'attempt_number'], 'exam_attempts_user_exam_attempt_unique');
             $table->index(['user_id', 'status']);
         });
     }
