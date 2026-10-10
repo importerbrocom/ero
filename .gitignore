@@ -1,0 +1,14 @@
+# Build / dependency artifacts (regenerated — not committed)
+**/vendor/
+**/node_modules/
+**/dist/
+backend/.env
+deploy-package/ero-app/vendor/
+deploy-package/*.zip
+**/database/*.sqlite
+
+# Logs & OS
+*.log
+.DS_Store
+**/storage/logs/*
+!**/storage/logs/.gitignore

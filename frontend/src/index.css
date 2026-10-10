@@ -1,0 +1,97 @@
+@import "tailwindcss";
+
+/*
+  ERO — Medical Learning Without Borders
+  Design system extracted from the official UI/UX screenshots.
+
+  Visual language:
+  - Dark navy base (#070B16 / #0B1120), slightly lighter cards (#0F1A30 / #111A2E)
+  - Electric blue primary (#2563EB / #3B82F6) with blue→purple gradient heroes
+  - Semantic: green success, red error/incorrect, amber/orange streaks
+  - Rounded-xl cards, subtle 1px borders (white/8), soft shadows
+*/
+@theme {
+  --color-ero-bg: #070b16;
+  --color-ero-bg-2: #0b1120;
+  --color-ero-surface: #0f1a30;
+  --color-ero-surface-2: #111a2e;
+  --color-ero-card: #13203a;
+  --color-ero-border: #1e2d4d;
+
+  --color-ero-primary: #2563eb;
+  --color-ero-primary-400: #3b82f6;
+  --color-ero-primary-600: #1d4ed8;
+
+  --color-ero-accent: #7c3aed;
+  --color-ero-success: #22c55e;
+  --color-ero-danger: #ef4444;
+  --color-ero-warning: #f59e0b;
+  --color-ero-streak: #f97316;
+
+  --color-ero-text: #e8eefc;
+  --color-ero-muted: #93a3c0;
+  --color-ero-faint: #64748b;
+
+  --radius-ero: 1rem;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-ero-bg);
+  color: var(--color-ero-text);
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
+    Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+}
+
+/* Custom scrollbar to match the dark theme */
+::-webkit-scrollbar {
+  width: 10px;
+  height: 10px;
+}
+::-webkit-scrollbar-track {
+  background: var(--color-ero-bg-2);
+}
+::-webkit-scrollbar-thumb {
+  background: #233251;
+  border-radius: 9999px;
+}
+
+@keyframes ero-fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(6px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.animate-fade-in {
+  animation: ero-fade-in 0.25s ease-out;
+}
+
+@keyframes ero-shimmer {
+  0% {
+    background-position: -400px 0;
+  }
+  100% {
+    background-position: 400px 0;
+  }
+}
+.ero-skeleton {
+  background: linear-gradient(
+    90deg,
+    #13203a 25%,
+    #1b2b4d 37%,
+    #13203a 63%
+  );
+  background-size: 800px 100%;
+  animation: ero-shimmer 1.4s infinite linear;
+}
