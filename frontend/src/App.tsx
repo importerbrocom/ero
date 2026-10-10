@@ -16,6 +16,14 @@ import ProgrammeDetail from './pages/ProgrammeDetail'
 import ExamInstructions from './pages/ExamInstructions'
 import ExamRunner from './pages/ExamRunner'
 import { ProfilePage, ProgressPage, SupportPage, TestsPage } from './pages/misc'
+import { AdminShell } from './components/AdminShell'
+import AdminOverview from './pages/admin/AdminOverview'
+import AdminStudents from './pages/admin/AdminStudents'
+import AdminQuestions from './pages/admin/AdminQuestions'
+import AdminImport from './pages/admin/AdminImport'
+import AdminProgrammes from './pages/admin/AdminProgrammes'
+import AdminCodes from './pages/admin/AdminCodes'
+import AdminAudit from './pages/admin/AdminAudit'
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const user = useAuth((s) => s.user)
@@ -29,6 +37,23 @@ function RequireAuth({ children }: { children: React.ReactNode }) {
     )
   }
   if (!user) return <Navigate to="/login" replace />
+  return <>{children}</>
+}
+
+function RequireAdmin({ children }: { children: React.ReactNode }) {
+  const user = useAuth((s) => s.user)
+  const initialized = useAuth((s) => s.initialized)
+
+  if (!initialized) {
+    return (
+      <div className="flex min-h-screen items-center justify-center bg-ero-bg text-ero-muted">
+        <Loader2 className="h-6 w-6 animate-spin" />
+      </div>
+    )
+  }
+  if (!user) return <Navigate to="/login" replace />
+  // Client-side convenience only — the API enforces the real authorisation.
+  if (user.role !== 'admin' && user.role !== 'super_admin') return <Navigate to="/app" replace />
   return <>{children}</>
 }
 
@@ -63,6 +88,23 @@ export default function App() {
           <Route path="progress" element={<ProgressPage />} />
           <Route path="profile" element={<ProfilePage />} />
           <Route path="support" element={<SupportPage />} />
+        </Route>
+
+        <Route
+          path="/admin"
+          element={
+            <RequireAdmin>
+              <AdminShell />
+            </RequireAdmin>
+          }
+        >
+          <Route index element={<AdminOverview />} />
+          <Route path="students" element={<AdminStudents />} />
+          <Route path="questions" element={<AdminQuestions />} />
+          <Route path="import" element={<AdminImport />} />
+          <Route path="programmes" element={<AdminProgrammes />} />
+          <Route path="codes" element={<AdminCodes />} />
+          <Route path="audit" element={<AdminAudit />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/app" replace />} />

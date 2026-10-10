@@ -8,6 +8,7 @@ import {
   LifeBuoy,
   Bell,
   ClipboardList,
+  Shield,
 } from 'lucide-react'
 import { clsx } from 'clsx'
 import { EroLogo } from './EroLogo'
@@ -69,6 +70,15 @@ export function AppShell() {
             <LifeBuoy className="h-5 w-5" />
             Help &amp; Support
           </NavLink>
+          {(user?.role === 'admin' || user?.role === 'super_admin') && (
+            <NavLink
+              to="/admin"
+              className="flex items-center gap-3 rounded-xl px-4 py-3 text-sm font-medium text-ero-accent hover:bg-ero-accent/10"
+            >
+              <Shield className="h-5 w-5" />
+              Admin Console
+            </NavLink>
+          )}
         </nav>
         <div className="border-t border-ero-border p-3">
           <button

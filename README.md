@@ -152,16 +152,38 @@ cd frontend && npm run build    # type-check + production build
 
 ---
 
+## Admin console (Phase 2 — delivered)
+
+A full admin area at `/admin` (role-gated, server-enforced via `role:admin`):
+
+- **Overview** — students (total/active/new), attempts (completed/in-progress/avg
+  accuracy), content counts, per-programme performance, recent audit activity.
+- **Students** — search/filter, suspend/reactivate, grant/revoke programme access.
+- **Question Bank** — list/search/filter by status, create/edit (with canonical
+  correct-option mapping) and archive questions; every change is versioned + audited.
+- **Import Questions** — upload CSV/XLSX, **two-phase**: a validated preview with
+  row-level errors first, then commit (only valid rows persist, in a transaction).
+  A downloadable CSV template documents the exact column format.
+- **Programmes** — view programmes and configure exams (block counts, durations,
+  55-min schedule, retry & result-visibility rules) via the API — all data-driven.
+- **Activation Codes** — generate batches, set redemption limits/expiry, revoke.
+- **Audit Logs** — significant admin/system events with actor, subject and time.
+
+Covered by `backend/tests/Feature/AdminApiTest.php` (role enforcement, question
+creation mapping, code batches, and the CSV import validate→commit cycle).
+
+Sign in as `admin@ero.test` / `super@ero.test` (password `password`) and the
+"Admin Console" link appears in the sidebar.
+
 ## Roadmap
 
-Delivered: auth, data model, exam engine, student web app, design system, tests.
+Delivered: auth, data model, exam engine, student web app, design system, cPanel
+deployment, and the **admin console + question import** (Phase 2). 20 passing tests.
 
 Next phases (scoped, not yet built):
-1. Admin dashboard — student/question/programme/code management, CSV/XLSX import
-   UI with preview + row-level validation, analytics & exports, audit-log views.
-2. Student analytics dashboards (accuracy trend, subject/topic, streaks, ranks).
-3. FMGE daily-practice & level-mock runtime UI.
-4. React Native (Expo) mobile app sharing the API contract in `frontend/src/types.ts`.
-5. Email verification + password reset flows, notifications.
-6. CI, deployment config, app-store readiness.
+1. Student analytics dashboards (accuracy trend, subject/topic, streaks, ranks).
+2. FMGE daily-practice & level-mock runtime UI.
+3. React Native (Expo) mobile app sharing the API contract in `frontend/src/types.ts`.
+4. Email verification + password reset flows, notifications.
+5. CI, deployment config, app-store readiness.
 ```
