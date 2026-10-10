@@ -211,3 +211,22 @@ export interface AttemptHistoryItem {
   started_at: string | null
   completed_at: string | null
 }
+
+export interface LevelLadderEntry {
+  level: number
+  exam_id: number | null
+  title: string
+  total_questions: number | null
+  duration_minutes: number | null
+  status: 'available' | 'locked' | 'completed' | 'coming_soon'
+  best_accuracy: number | null
+  passed: boolean
+  pass_accuracy: number
+}
+
+export interface LevelLadder {
+  programme: { id: number; name: string; slug: string }
+  levels: number
+  pass_accuracy: number
+  ladder: LevelLadderEntry[]
+}

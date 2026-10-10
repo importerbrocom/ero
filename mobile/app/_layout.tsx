@@ -40,6 +40,7 @@ function RootNavigator() {
       <Stack.Screen name="attempt/[attemptId]" />
       <Stack.Screen name="practice/[enrollmentId]/index" />
       <Stack.Screen name="practice/[enrollmentId]/day/[day]" />
+      <Stack.Screen name="levels/[slug]" />
     </Stack>
   )
 }

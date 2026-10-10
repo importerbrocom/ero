@@ -4,6 +4,7 @@ import type {
   Attempt,
   AttemptHistoryItem,
   ExamQuestion,
+  LevelLadder,
   PracticeDay,
   PracticePlan,
   Programme,
@@ -82,3 +83,7 @@ export const fetchAttemptHistory = () =>
   api
     .get<{ data: AttemptHistoryItem[]; meta: unknown }>('/analytics/attempts')
     .then((r) => r.data.data)
+
+// --- FMGE level ladder ---
+export const fetchLevelLadder = (slug: string) =>
+  api.get<{ data: LevelLadder }>(`/programmes/${slug}/levels`).then((r) => r.data.data)

@@ -17,6 +17,7 @@ import ChooseExam from './pages/ChooseExam'
 import ProgrammeDetail from './pages/ProgrammeDetail'
 import ExamInstructions from './pages/ExamInstructions'
 import ExamRunner from './pages/ExamRunner'
+import Levels from './pages/Levels'
 import Progress from './pages/Progress'
 import Tests from './pages/Tests'
 import DailyPractice from './pages/DailyPractice'
@@ -90,6 +91,7 @@ export default function App() {
           <Route index element={<Dashboard />} />
           <Route path="exams" element={<ChooseExam />} />
           <Route path="programmes/:slug" element={<ProgrammeDetail />} />
+          <Route path="programmes/:slug/levels" element={<Levels />} />
           <Route path="exams/:examId/instructions" element={<ExamInstructions />} />
           <Route path="attempts/:attemptId" element={<ExamRunner />} />
           <Route path="exams/:examId/practice" element={<DailyPractice />} />

@@ -42,6 +42,8 @@ class ProgrammeConfig
             'questions_per_study_day' => 10,
             'level_mock_size' => 300,
             'level_mock_day' => 31,
+            'level_mock_duration_minutes' => 180, // 3-hour full-length mock
+            'level_pass_accuracy' => 50,          // % needed to unlock the next level
             'activation_required' => true,
         ];
     }

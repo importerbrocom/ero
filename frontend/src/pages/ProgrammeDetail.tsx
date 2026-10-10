@@ -62,6 +62,19 @@ export default function ProgrammeDetail() {
         </div>
       </div>
 
+      {/* Level ladder entry (shown when the programme has level mocks) */}
+      {programme.has_access && programme.exams.some((e) => e.type === 'level_mock') && (
+        <Card className="flex items-center justify-between">
+          <div>
+            <h3 className="font-bold">Level Mocks</h3>
+            <p className="text-sm text-ero-muted">Progress through the level ladder — pass each to unlock the next.</p>
+          </div>
+          <Button onClick={() => navigate(`/app/programmes/${programme.slug}/levels`)}>
+            View Levels <ArrowRight className="h-4 w-4" />
+          </Button>
+        </Card>
+      )}
+
       {/* Exams */}
       <section>
         <h2 className="mb-3 text-lg font-bold">Examinations</h2>
@@ -73,7 +86,7 @@ export default function ProgrammeDetail() {
           </Card>
         )}
         <div className="space-y-3">
-          {programme.exams.map((exam) => (
+          {programme.exams.filter((e) => e.type !== 'level_mock').map((exam) => (
             <Card key={exam.id} className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
               <div>
                 <div className="flex items-center gap-2">

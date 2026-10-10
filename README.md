@@ -230,15 +230,31 @@ Covered by `backend/tests/Feature/AuthHardeningTest.php`. **33 passing tests tot
 > Email delivery: on shared hosting without SMTP the notifications use the `log`
 > mailer by default. Configure a real mailer in `.env` (`MAIL_*`) for production.
 
+## FMGE level mocks (Phase 6 — delivered)
+
+- **Level ladder** (`GET /programmes/{slug}/levels`) — the 6-level FMGE structure
+  (§6): each level is a full-length mock exam (300 questions, configurable),
+  built on the existing exam engine. A level **unlocks only when the previous
+  level's mock is passed** (≥ `level_pass_accuracy`, default 50%). The lock is
+  enforced **server-side** in `AttemptController::start` (403 on a locked level),
+  not just hidden in the UI.
+- **Levels page** (web + mobile, screenshot 1 style) — locked/unlocked level
+  cards with best-accuracy, pass badges, and start/retake actions; linked from
+  the programme detail screen.
+- Seeder provisions 6 published level mocks for FMGE.
+
+Covered by `backend/tests/Feature/LevelMockTest.php` (ladder status, lock before
+passing, unlock on pass, no-unlock on fail). **37 passing tests total.**
+
 ## Roadmap
 
-Delivered: auth, data model, exam engine, student web app, design system, cPanel
-deployment, admin console + question import, student analytics + daily practice,
-the React Native mobile app, and **password reset + email verification + CI**
-(Phase 5). 33 backend tests passing; web + mobile type-check clean.
+Delivered across six phases: auth (+ reset/verification), data model, exam
+engine, student web app, design system, cPanel deployment, admin console +
+question import, student analytics + daily practice, the React Native mobile
+app, CI, and the **FMGE level mocks**. 37 backend tests passing; web + mobile
+type-check clean; CI automated.
 
-Next (optional):
-1. FMGE level-mock (Day-31 300-question) runtime UI on top of the exam engine.
-2. Push notifications; configure a production mailer.
-3. EAS production store submissions.
+Optional remaining polish:
+1. Push notifications; configure a production mailer (`MAIL_*`).
+2. EAS production store submissions (needs Apple/Google accounts).
 ```

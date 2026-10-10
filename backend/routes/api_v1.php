@@ -6,6 +6,7 @@ use App\Http\Controllers\Api\V1\AnalyticsController;
 use App\Http\Controllers\Api\V1\AttemptController;
 use App\Http\Controllers\Api\V1\AuthController;
 use App\Http\Controllers\Api\V1\EmailVerificationController;
+use App\Http\Controllers\Api\V1\LevelController;
 use App\Http\Controllers\Api\V1\PasswordResetController;
 use App\Http\Controllers\Api\V1\PracticeController;
 use App\Http\Controllers\Api\V1\ProgrammeController;
@@ -63,6 +64,9 @@ Route::middleware('auth:sanctum')->group(function () {
     // Student analytics (screenshot 12)
     Route::get('/analytics/overview', [AnalyticsController::class, 'overview']);
     Route::get('/analytics/attempts', [AnalyticsController::class, 'attempts']);
+
+    // FMGE level ladder (§6)
+    Route::get('/programmes/{programme}/levels', [LevelController::class, 'index']);
 });
 
 /*

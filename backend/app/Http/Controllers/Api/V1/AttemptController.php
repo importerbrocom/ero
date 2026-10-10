@@ -26,6 +26,15 @@ class AttemptController extends Controller
         abort_unless($user->canAccessProgramme($exam->exam_programme_id), 403,
             'You do not have access to this programme. Redeem an activation code to unlock it.');
 
+        // §6 — level mocks unlock sequentially: level N requires passing N-1.
+        if ($exam->type === \App\Models\Exam::TYPE_LEVEL_MOCK && $exam->level && $exam->level > 1) {
+            if (! $this->previousLevelPassed($user, $exam)) {
+                return response()->json([
+                    'message' => 'Complete the previous level mock with a passing score to unlock this level.',
+                ], 403);
+            }
+        }
+
         try {
             $attempt = $this->engine->startAttempt($user, $exam);
         } catch (RuntimeException $e) {
@@ -184,6 +193,29 @@ class AttemptController extends Controller
     private function authorizeAttempt(Request $request, ExamAttempt $attempt): void
     {
         abort_unless($attempt->user_id === $request->user()->id, 403);
+    }
+
+    /** §6 — has the user passed the mock for the level below this one? */
+    private function previousLevelPassed(\App\Models\User $user, Exam $exam): bool
+    {
+        $prev = Exam::where('exam_programme_id', $exam->exam_programme_id)
+            ->where('type', Exam::TYPE_LEVEL_MOCK)
+            ->where('level', $exam->level - 1)
+            ->where('status', 'published')
+            ->first();
+
+        // If the previous level isn't published, don't block.
+        if (! $prev) {
+            return true;
+        }
+
+        $passAccuracy = (float) $exam->programme->configuration()->get('level_pass_accuracy', 50);
+
+        return ExamAttempt::where('user_id', $user->id)
+            ->where('exam_id', $prev->id)
+            ->where('status', 'completed')
+            ->where('accuracy', '>=', $passAccuracy)
+            ->exists();
     }
 
     private function assertBlockBelongs(ExamAttempt $attempt, ExamAttemptBlock $block): void

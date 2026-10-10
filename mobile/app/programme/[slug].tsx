@@ -58,11 +58,21 @@ export default function ProgrammeScreen() {
           </View>
         </View>
 
+        {programme.has_access && programme.exams.some((e) => e.type === 'level_mock') ? (
+          <Card style={{ marginBottom: spacing(4), flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between' }}>
+            <View style={{ flex: 1 }}>
+              <Text style={{ color: colors.text, fontWeight: '700' }}>Level Mocks</Text>
+              <Text style={{ color: colors.muted, fontSize: font.xs }}>Pass each to unlock the next.</Text>
+            </View>
+            <Button label="View Levels" style={{ paddingVertical: 8, paddingHorizontal: 14 }} onPress={() => router.push(`/levels/${programme.slug}`)} />
+          </Card>
+        ) : null}
+
         <Text style={{ color: colors.text, fontSize: font.lg, fontWeight: '800', marginBottom: spacing(3) }}>Examinations</Text>
-        {programme.exams.length === 0 ? (
+        {programme.exams.filter((e) => e.type !== 'level_mock').length === 0 ? (
           <Card><Text style={{ color: colors.muted }}>No published examinations yet.</Text></Card>
         ) : (
-          programme.exams.map((exam) => (
+          programme.exams.filter((e) => e.type !== 'level_mock').map((exam) => (
             <Card key={exam.id} style={{ marginBottom: spacing(3) }}>
               <View style={{ flexDirection: 'row', alignItems: 'center', gap: spacing(2), marginBottom: 4 }}>
                 <Text style={{ color: colors.text, fontWeight: '800', flex: 1 }}>{exam.title}</Text>

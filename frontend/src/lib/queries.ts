@@ -118,3 +118,11 @@ export async function submitPracticeDay(
   const { data } = await api.post(`/practice/${enrollmentId}/days/${dayId}/submit`, { responses })
   return data
 }
+
+// ---- Phase 6: FMGE level ladder ----
+import type { LevelLadder } from '../types'
+
+export async function fetchLevelLadder(slug: string): Promise<LevelLadder> {
+  const { data } = await api.get(`/programmes/${slug}/levels`)
+  return data.data
+}

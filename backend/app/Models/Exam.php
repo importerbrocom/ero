@@ -17,7 +17,7 @@ class Exam extends Model
     public const TYPE_SUBJECT_TEST = 'subject_test';
 
     protected $fillable = [
-        'exam_programme_id', 'type', 'title', 'description',
+        'exam_programme_id', 'type', 'level', 'title', 'description',
         'block_count', 'questions_per_block', 'block_duration_minutes',
         'block_release_interval_minutes', 'block_release_mode',
         'randomize_block_order', 'randomize_questions', 'randomize_options',
