@@ -8,6 +8,7 @@ import {
 import { Loader2 } from 'lucide-react'
 import { useAuth } from './store/auth'
 import { AppShell } from './components/AppShell'
+import Onboarding from './pages/Onboarding'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import ForgotPassword from './pages/ForgotPassword'
@@ -75,6 +76,7 @@ export default function App() {
   return (
     <BrowserRouter>
       <Routes>
+        <Route path="/" element={user ? <Navigate to="/app" replace /> : <Onboarding />} />
         <Route path="/login" element={user ? <Navigate to="/app" replace /> : <Login />} />
         <Route path="/register" element={user ? <Navigate to="/app" replace /> : <Register />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />

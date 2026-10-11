@@ -43,6 +43,9 @@ export interface ExamSummary {
   questions_per_block: number
   total_questions: number
   block_duration_minutes: number
+  plan_days?: number | null
+  questions_per_day?: number | null
+  timer_enabled?: boolean
 }
 
 export interface ProgrammeDetail extends Programme {
