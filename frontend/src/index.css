@@ -2,35 +2,46 @@
 
 /*
   ERO — Medical Learning Without Borders
-  Design system extracted from the official UI/UX screenshots.
+  Design system — exact palette from the official reference screenshots.
 
-  Visual language:
-  - Dark navy base (#070B16 / #0B1120), slightly lighter cards (#0F1A30 / #111A2E)
-  - Electric blue primary (#2563EB / #3B82F6) with blue→purple gradient heroes
-  - Semantic: green success, red error/incorrect, amber/orange streaks
-  - Rounded-xl cards, subtle 1px borders (white/8), soft shadows
+  Premium dark-cinematic medical education interface:
+  - Deep navy / midnight-blue backgrounds (#031226 → #0B2341)
+  - Electric-blue primary (#086BFF / #1678FF) with blue gradient CTAs
+  - Thin blue-gray borders; white headings; cool blue-gray secondary text
+  - Neon green, cyan, purple, magenta, amber, orange accents
 */
 @theme {
-  --color-ero-bg: #070b16;
-  --color-ero-bg-2: #0b1120;
-  --color-ero-surface: #0f1a30;
-  --color-ero-surface-2: #111a2e;
-  --color-ero-card: #13203a;
-  --color-ero-border: #1e2d4d;
+  /* Backgrounds (deepest → elevated) */
+  --color-ero-bg: #031226;
+  --color-ero-bg-2: #061a32;
+  --color-ero-card: #071b33;
+  --color-ero-surface: #071b33;
+  --color-ero-surface-2: #0b2341;
+  --color-ero-panel: #0b2341;
+  --color-ero-input: #0a1d38;
 
-  --color-ero-primary: #2563eb;
-  --color-ero-primary-400: #3b82f6;
-  --color-ero-primary-600: #1d4ed8;
+  /* Borders */
+  --color-ero-border: #193d68;
+  --color-ero-border-2: #24466c;
 
-  --color-ero-accent: #7c3aed;
-  --color-ero-success: #22c55e;
-  --color-ero-danger: #ef4444;
-  --color-ero-warning: #f59e0b;
-  --color-ero-streak: #f97316;
+  /* Blues */
+  --color-ero-primary: #086bff;
+  --color-ero-primary-400: #1678ff;
+  --color-ero-primary-600: #0758e8;
+  --color-ero-glow: #168bff;
 
-  --color-ero-text: #e8eefc;
-  --color-ero-muted: #93a3c0;
-  --color-ero-faint: #64748b;
+  /* Accents */
+  --color-ero-accent: #8b45f6;
+  --color-ero-success: #12e6a5;
+  --color-ero-cyan: #18d9c5;
+  --color-ero-danger: #ff416d;
+  --color-ero-warning: #ffb72c;
+  --color-ero-streak: #ff7b35;
+
+  /* Text */
+  --color-ero-text: #f5f7ff;
+  --color-ero-muted: #b7c7e8;
+  --color-ero-faint: #8398bb;
 
   --radius-ero: 1rem;
 }
@@ -48,9 +59,50 @@ body {
   font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Helvetica,
     Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
 }
 
-/* Custom scrollbar to match the dark theme */
+/* ---- Brand gradients (used by components) ---- */
+.ero-grad-primary {
+  background-image: linear-gradient(135deg, #0878ff 0%, #0758e8 100%);
+}
+.ero-grad-success {
+  background-image: linear-gradient(135deg, #19e6a5 0%, #11cfa9 100%);
+}
+.ero-grad-purple {
+  background-image: linear-gradient(135deg, #8d42f6 0%, #581fc5 100%);
+}
+.ero-grad-pink {
+  background-image: linear-gradient(135deg, #f53d78 0%, #a51e56 100%);
+}
+.ero-grad-amber {
+  background-image: linear-gradient(135deg, #ffbf32 0%, #f28a23 100%);
+}
+/* Hero banner atmosphere (navy → blue with subtle glow) */
+.ero-grad-hero {
+  background-image: radial-gradient(
+      120% 140% at 85% 10%,
+      rgba(22, 139, 255, 0.35) 0%,
+      rgba(8, 107, 255, 0.12) 35%,
+      transparent 65%
+    ),
+    linear-gradient(120deg, #06204a 0%, #061a32 55%, #04142a 100%);
+}
+.ero-grad-mock {
+  background-image: radial-gradient(
+      120% 160% at 90% 0%,
+      rgba(139, 69, 246, 0.45) 0%,
+      transparent 60%
+    ),
+    linear-gradient(120deg, #10204e 0%, #141033 60%, #0a0f2a 100%);
+}
+
+/* Soft outer glow for primary CTAs */
+.ero-glow-primary {
+  box-shadow: 0 8px 24px -6px rgba(8, 107, 255, 0.5);
+}
+
+/* ---- Custom scrollbar ---- */
 ::-webkit-scrollbar {
   width: 10px;
   height: 10px;
@@ -59,7 +111,7 @@ body {
   background: var(--color-ero-bg-2);
 }
 ::-webkit-scrollbar-thumb {
-  background: #233251;
+  background: #1c3b63;
   border-radius: 9999px;
 }
 
@@ -86,12 +138,7 @@ body {
   }
 }
 .ero-skeleton {
-  background: linear-gradient(
-    90deg,
-    #13203a 25%,
-    #1b2b4d 37%,
-    #13203a 63%
-  );
+  background: linear-gradient(90deg, #071b33 25%, #0e2a4d 37%, #071b33 63%);
   background-size: 800px 100%;
   animation: ero-shimmer 1.4s infinite linear;
 }

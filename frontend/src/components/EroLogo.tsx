@@ -29,18 +29,13 @@ export function EroLogo({
       {logoSrc ? (
         <img src={logoSrc} alt="ERO" style={{ height: dims.icon * 1.4 }} />
       ) : (
-        <div
-          className="flex items-center justify-center rounded-xl bg-gradient-to-br from-ero-primary-400 to-ero-accent"
-          style={{ width: dims.icon * 1.5, height: dims.icon * 1.5 }}
-        >
-          <GraduationCap size={dims.icon} className="text-white" />
-        </div>
+        <GraduationCap size={dims.icon * 1.15} className="text-ero-primary-400" strokeWidth={2.4} />
       )}
       <div className="leading-tight">
-        <div className={`font-extrabold tracking-wide ${dims.title}`}>
-          <span className="text-white">E</span>
-          <span className="text-ero-primary-400">R</span>
-          <span className="text-white">O</span>
+        <div
+          className={`bg-gradient-to-r from-ero-primary-400 to-[#8fc2ff] bg-clip-text font-extrabold tracking-wide text-transparent ${dims.title}`}
+        >
+          ERO
         </div>
         {showTagline && (
           <div className={`font-medium uppercase tracking-[0.18em] text-ero-muted ${dims.tag}`}>

@@ -94,44 +94,43 @@ export default function ChooseExam() {
 
       <div className="grid gap-4 sm:grid-cols-2">
         {filtered?.map((p) => (
-          <Card
-            key={p.id}
-            className="group relative overflow-hidden"
-          >
+          <Link key={p.id} to={`/app/programmes/${p.slug}`} className="block">
             <div
-              className="absolute inset-x-0 top-0 h-1"
-              style={{ background: p.accent_color }}
-            />
-            <div className="flex items-start justify-between gap-3">
-              <div className="flex items-center gap-3">
-                <div className="text-3xl">{p.flag_emoji ?? '🎓'}</div>
-                <div>
-                  <div className="flex items-center gap-2">
-                    <h3 className="text-lg font-bold">{p.name}</h3>
-                    {p.has_access ? (
-                      <Badge tone="success">Unlocked</Badge>
-                    ) : (
-                      <Badge tone="locked">
-                        <Lock className="h-3 w-3" /> Locked
-                      </Badge>
-                    )}
+              className="group relative overflow-hidden rounded-2xl border border-ero-border p-4 transition-transform hover:-translate-y-0.5"
+              style={{
+                backgroundImage: `linear-gradient(120deg, ${p.accent_color}24 0%, var(--color-ero-card) 62%)`,
+              }}
+            >
+              <span className="absolute inset-x-0 top-0 h-1" style={{ background: p.accent_color }} />
+              <div className="flex items-start justify-between gap-3">
+                <div className="flex items-center gap-3">
+                  <div className="text-3xl leading-none">{p.flag_emoji ?? '🎓'}</div>
+                  <div>
+                    <div className="flex items-center gap-2">
+                      <h3 className="text-lg font-bold text-white">{p.name}</h3>
+                      {p.has_access ? (
+                        <Badge tone="success">Unlocked</Badge>
+                      ) : (
+                        <Badge tone="locked">
+                          <Lock className="h-3 w-3" /> Locked
+                        </Badge>
+                      )}
+                    </div>
+                    <p className="text-sm text-ero-muted">{p.full_name}</p>
+                    <p className="mt-1 text-xs text-ero-faint">
+                      {p.question_count.toLocaleString()} questions · {p.country}
+                    </p>
                   </div>
-                  <p className="text-sm text-ero-muted">{p.full_name}</p>
-                  <p className="mt-1 text-xs text-ero-faint">
-                    {p.question_count.toLocaleString()} questions · {p.country}
-                  </p>
                 </div>
+                <span
+                  className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white"
+                  style={{ background: p.accent_color }}
+                >
+                  <ArrowRight className="h-4 w-4" />
+                </span>
               </div>
             </div>
-            <div className="mt-4">
-              <Link to={`/app/programmes/${p.slug}`}>
-                <Button variant={p.has_access ? 'primary' : 'secondary'} fullWidth>
-                  {p.has_access ? 'Open Programme' : 'View Details'}
-                  <ArrowRight className="h-4 w-4" />
-                </Button>
-              </Link>
-            </div>
-          </Card>
+          </Link>
         ))}
       </div>
     </div>
