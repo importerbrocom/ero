@@ -30,7 +30,7 @@ export function AttemptResults({ attempt, onDone }: { attempt: Attempt; onDone: 
 
   return (
     <div className="mx-auto max-w-3xl space-y-5">
-      <div className="rounded-2xl bg-gradient-to-r from-ero-primary-600 to-ero-accent p-6 text-center">
+      <div className="ero-grad-primary rounded-2xl p-6 text-center">
         <p className="text-sm font-medium text-white/80">Examination complete</p>
         <h1 className="mt-1 text-2xl font-extrabold text-white">{attempt.exam.title}</h1>
         {attempt.status === 'expired' && (
@@ -55,16 +55,16 @@ export function AttemptResults({ attempt, onDone }: { attempt: Attempt; onDone: 
           <div className="h-64">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={subjectData}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e2d4d" />
-                <XAxis dataKey="name" tick={{ fill: '#93a3c0', fontSize: 11 }} interval={0} angle={-15} textAnchor="end" height={60} />
-                <YAxis domain={[0, 100]} tick={{ fill: '#93a3c0', fontSize: 11 }} unit="%" />
+                <CartesianGrid strokeDasharray="3 3" stroke="#193d68" />
+                <XAxis dataKey="name" tick={{ fill: '#8398bb', fontSize: 11 }} interval={0} angle={-15} textAnchor="end" height={60} />
+                <YAxis domain={[0, 100]} tick={{ fill: '#8398bb', fontSize: 11 }} unit="%" />
                 <Tooltip
-                  contentStyle={{ background: '#0f1a30', border: '1px solid #1e2d4d', borderRadius: 12 }}
-                  labelStyle={{ color: '#e8eefc' }}
+                  contentStyle={{ background: '#0b2341', border: '1px solid #193d68', borderRadius: 12 }}
+                  labelStyle={{ color: '#f5f7ff' }}
                 />
                 <Bar dataKey="accuracy" radius={[6, 6, 0, 0]}>
                   {subjectData.map((d, i) => (
-                    <Cell key={i} fill={d.accuracy >= 70 ? '#22c55e' : d.accuracy >= 50 ? '#f59e0b' : '#ef4444'} />
+                    <Cell key={i} fill={d.accuracy >= 70 ? '#12e6a5' : d.accuracy >= 50 ? '#ffb72c' : '#ff416d'} />
                   ))}
                 </Bar>
               </BarChart>
