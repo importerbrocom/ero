@@ -9,10 +9,11 @@ import {
   XCircle,
   ClipboardList,
   FileText,
+  Layers,
 } from 'lucide-react'
 import { fetchAnalytics, fetchProgrammes } from '../lib/queries'
 import type { AnalyticsOverview, Programme } from '../types'
-import { Button, Card, EmptyState, KpiChip, ProgressRing, Skeleton } from '../components/ui'
+import { Button, Card, EmptyState, HeroBanner, ProgressRing, Skeleton, StatCard } from '../components/ui'
 import { useAuth } from '../store/auth'
 
 export default function Dashboard() {
@@ -30,43 +31,52 @@ export default function Dashboard() {
 
   return (
     <div className="mx-auto max-w-5xl space-y-6">
-      {/* Welcome hero (screenshot 4) */}
-      <div className="relative overflow-hidden rounded-2xl bg-gradient-to-r from-ero-primary-600 via-ero-primary to-ero-accent p-6">
-        <div className="relative z-10">
-          <p className="text-sm font-medium text-white/80">Welcome back</p>
-          <h1 className="mt-1 text-2xl font-extrabold text-white">
-            {user?.name}, let's continue your preparation
-          </h1>
-          <p className="mt-1 text-sm text-white/80">
-            Pick up where you left off or start a new mock exam.
-          </p>
+      {/* Welcome hero with monthly-goal progress (screenshot 4) */}
+      <HeroBanner
+        title={<>Welcome Back{user?.name ? `, ${user.name.split(' ')[0]}` : ''}!</>}
+        subtitle={<span className="text-ero-text">Let's continue your preparation</span>}
+      >
+        <div className="max-w-sm">
+          <div className="mb-1 flex items-center justify-between text-xs text-ero-muted">
+            <span>Your Monthly Goal</span>
+            <span>{analytics?.questions_attempted ?? 0} questions</span>
+          </div>
+          <div className="h-2 overflow-hidden rounded-full bg-white/10">
+            <div
+              className="ero-grad-primary h-full rounded-full"
+              style={{ width: `${Math.min(100, ((analytics?.questions_attempted ?? 0) / 300) * 100)}%` }}
+            />
+          </div>
           <Link to="/app/exams">
-            <Button className="mt-4 bg-white !text-ero-primary-600 hover:bg-white/90">
+            <Button className="mt-4">
               Choose an Exam <ArrowRight className="h-4 w-4" />
             </Button>
           </Link>
         </div>
-      </div>
+      </HeroBanner>
 
-      {/* Quick action tiles */}
+      {/* Quick-action tiles (colored, screenshot 4) */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <QuickTile icon={<ClipboardList />} label="Daily Practice" to="/app/exams" />
-        <QuickTile icon={<FileText />} label="Mock Tests" to="/app/tests" />
-        <QuickTile icon={<BookOpen />} label="Programmes" to="/app/exams" />
-        <QuickTile icon={<CalendarDays />} label="Progress" to="/app/progress" />
+        <QuickTile icon={<ClipboardList className="h-6 w-6" />} title="Today's Quiz" sub="10 Questions" to="/app/exams" grad="ero-grad-primary" />
+        <QuickTile icon={<FileText className="h-6 w-6" />} title="Mock Tests" sub="Full Length" to="/app/tests" grad="ero-grad-success" />
+        <QuickTile icon={<BookOpen className="h-6 w-6" />} title="Programmes" sub="All Exams" to="/app/exams" grad="ero-grad-purple" />
+        <QuickTile icon={<CalendarDays className="h-6 w-6" />} title="Progress" sub="Analytics" to="/app/progress" grad="ero-grad-amber" />
       </div>
 
-      {/* Overall progress — honest empty state for a new student (no fake stats) */}
+      {/* Overall progress */}
       <Card>
-        <h2 className="mb-4 text-lg font-bold">Overall Progress</h2>
+        <div className="mb-4 flex items-center justify-between">
+          <h2 className="text-lg font-bold">Overall Progress</h2>
+          {hasStarted && <span className="text-xs text-ero-muted">All time</span>}
+        </div>
         {hasStarted && analytics ? (
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4">
-            <div className="flex items-center justify-center">
+          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
+            <Card className="flex flex-col items-center justify-center">
               <ProgressRing value={analytics.overall_accuracy} label="Accuracy" />
-            </div>
-            <KpiChip icon={<ClipboardList className="h-6 w-6" />} value={analytics.questions_attempted} label="Attempted" />
-            <KpiChip icon={<CheckCircle2 className="h-6 w-6" />} value={analytics.correct} label="Correct" tone="success" />
-            <KpiChip icon={<XCircle className="h-6 w-6" />} value={analytics.incorrect} label="Incorrect" tone="danger" />
+            </Card>
+            <StatCard icon={<ClipboardList className="h-6 w-6" />} value={analytics.questions_attempted} label="Questions Attempted" />
+            <StatCard icon={<CheckCircle2 className="h-6 w-6" />} value={analytics.correct} label="Correct" tone="success" />
+            <StatCard icon={<XCircle className="h-6 w-6" />} value={analytics.incorrect} label="Incorrect" tone="danger" />
           </div>
         ) : (
           <EmptyState
@@ -87,7 +97,7 @@ export default function Dashboard() {
         <div className="mb-4 flex items-center justify-between">
           <h2 className="text-lg font-bold">My Programmes</h2>
           <Link to="/app/exams" className="text-sm font-semibold text-ero-primary-400">
-            View All
+            View All →
           </Link>
         </div>
         {!programmes && (
@@ -111,18 +121,21 @@ export default function Dashboard() {
         <div className="grid gap-3 sm:grid-cols-2">
           {accessible.map((p) => (
             <Link key={p.id} to={`/app/programmes/${p.slug}`}>
-              <Card className="flex items-center justify-between transition-colors hover:border-ero-primary-400">
+              <div
+                className="flex items-center justify-between rounded-xl border border-ero-border p-4 transition-colors hover:border-ero-primary-400"
+                style={{ backgroundImage: `linear-gradient(120deg, ${p.accent_color}1f 0%, var(--color-ero-card) 60%)` }}
+              >
                 <div className="flex items-center gap-3">
                   <span className="text-2xl">{p.flag_emoji}</span>
                   <div>
-                    <div className="font-semibold">{p.name}</div>
+                    <div className="font-semibold text-white">{p.name}</div>
                     <div className="text-xs text-ero-muted">
                       {p.question_count.toLocaleString()} questions
                     </div>
                   </div>
                 </div>
                 <ArrowRight className="h-5 w-5 text-ero-muted" />
-              </Card>
+              </div>
             </Link>
           ))}
         </div>
@@ -130,25 +143,40 @@ export default function Dashboard() {
 
       {/* Streak strip */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <KpiChip icon={<Flame className="h-6 w-6" />} value={analytics?.current_streak ?? 0} label="Current Streak" tone="streak" />
-        <KpiChip icon={<CheckCircle2 className="h-6 w-6" />} value={analytics?.days_completed ?? 0} label="Days Completed" tone="success" />
-        <KpiChip icon={<ClipboardList className="h-6 w-6" />} value={analytics?.questions_attempted ?? 0} label="Questions Answered" />
-        <KpiChip icon={<FileText className="h-6 w-6" />} value={accessible.length} label="Programmes" />
+        <StatCard icon={<Flame className="h-6 w-6" />} value={analytics?.current_streak ?? 0} label="Current Streak" tone="streak" />
+        <StatCard icon={<CheckCircle2 className="h-6 w-6" />} value={analytics?.days_completed ?? 0} label="Days Completed" tone="success" />
+        <StatCard icon={<ClipboardList className="h-6 w-6" />} value={analytics?.questions_attempted ?? 0} label="Questions Answered" tone="cyan" />
+        <StatCard icon={<Layers className="h-6 w-6" />} value={accessible.length} label="Programmes" tone="purple" />
       </div>
     </div>
   )
 }
 
-function QuickTile({ icon, label, to }: { icon: React.ReactNode; label: string; to: string }) {
+function QuickTile({
+  icon,
+  title,
+  sub,
+  to,
+  grad,
+}: {
+  icon: React.ReactNode
+  title: string
+  sub: string
+  to: string
+  grad: string
+}) {
   return (
     <Link to={to}>
-      <Card className="flex h-full flex-col justify-between gap-6 transition-colors hover:border-ero-primary-400">
-        <div className="text-ero-primary-400">{icon}</div>
-        <div className="flex items-center justify-between text-sm font-semibold">
-          {label}
-          <ArrowRight className="h-4 w-4 text-ero-muted" />
+      <div className={`${grad} relative flex h-full flex-col justify-between gap-6 overflow-hidden rounded-2xl p-4 text-white transition-transform hover:-translate-y-0.5`}>
+        <div className="flex items-start justify-between">
+          <span className="opacity-90">{icon}</span>
+          <ArrowRight className="h-4 w-4 opacity-80" />
         </div>
-      </Card>
+        <div>
+          <div className="text-sm font-bold">{title}</div>
+          <div className="text-xs opacity-80">{sub}</div>
+        </div>
+      </div>
     </Link>
   )
 }

@@ -15,7 +15,7 @@ import {
 import { CheckCircle2, XCircle, Flame, Clock, ClipboardList } from 'lucide-react'
 import { fetchAnalytics } from '../lib/queries'
 import type { AnalyticsOverview } from '../types'
-import { Button, Card, EmptyState, KpiChip, ProgressRing, Skeleton } from '../components/ui'
+import { Button, Card, EmptyState, ProgressRing, Skeleton, StatCard } from '../components/ui'
 
 export default function Progress() {
   const [data, setData] = useState<AnalyticsOverview | null>(null)
@@ -56,20 +56,20 @@ export default function Progress() {
     <div className="mx-auto max-w-4xl space-y-6">
       <h1 className="text-2xl font-extrabold">Progress</h1>
 
-      {/* KPI row (screenshot 12) */}
+      {/* KPI row (screenshot 11) */}
       <div className="grid grid-cols-2 gap-3 sm:grid-cols-4">
-        <Card className="flex items-center justify-center">
+        <Card className="flex flex-col items-center justify-center">
           <ProgressRing value={data.overall_accuracy} size={84} label="Accuracy" />
         </Card>
-        <KpiChip icon={<ClipboardList className="h-6 w-6" />} value={data.questions_attempted} label="Attempted" />
-        <KpiChip icon={<CheckCircle2 className="h-6 w-6" />} value={data.correct} label="Correct" tone="success" />
-        <KpiChip icon={<XCircle className="h-6 w-6" />} value={data.incorrect} label="Incorrect" tone="danger" />
+        <StatCard icon={<ClipboardList className="h-6 w-6" />} value={data.questions_attempted} label="Questions Attempted" />
+        <StatCard icon={<CheckCircle2 className="h-6 w-6" />} value={data.correct} label="Correct" tone="success" />
+        <StatCard icon={<XCircle className="h-6 w-6" />} value={data.incorrect} label="Incorrect" tone="danger" />
       </div>
 
-      <div className="grid grid-cols-2 gap-3 sm:grid-cols-3">
-        <KpiChip icon={<Flame className="h-6 w-6" />} value={data.current_streak} label="Day Streak" tone="streak" />
-        <KpiChip icon={<Flame className="h-6 w-6" />} value={data.best_streak} label="Best Streak" tone="streak" />
-        <KpiChip icon={<Clock className="h-6 w-6" />} value={data.mock_attempts} label="Mock Attempts" />
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-3">
+        <StatCard icon={<Clock className="h-6 w-6" />} value={data.current_streak} label="Day Streak" tone="streak" />
+        <StatCard icon={<Flame className="h-6 w-6" />} value={data.best_streak} label="Best Streak" tone="streak" />
+        <StatCard icon={<Clock className="h-6 w-6" />} value={data.mock_attempts} label="Mock Attempts" tone="purple" />
       </div>
 
       {/* Accuracy trend */}
@@ -81,18 +81,18 @@ export default function Progress() {
               <AreaChart data={trend}>
                 <defs>
                   <linearGradient id="ero-trend" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#3b82f6" stopOpacity={0.5} />
-                    <stop offset="100%" stopColor="#3b82f6" stopOpacity={0} />
+                    <stop offset="0%" stopColor="#1678ff" stopOpacity={0.5} />
+                    <stop offset="100%" stopColor="#1678ff" stopOpacity={0} />
                   </linearGradient>
                 </defs>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e2d4d" />
-                <XAxis dataKey="label" tick={{ fill: '#93a3c0', fontSize: 11 }} />
-                <YAxis domain={[0, 100]} unit="%" tick={{ fill: '#93a3c0', fontSize: 11 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#193d68" />
+                <XAxis dataKey="label" tick={{ fill: '#8398bb', fontSize: 11 }} />
+                <YAxis domain={[0, 100]} unit="%" tick={{ fill: '#8398bb', fontSize: 11 }} />
                 <Tooltip
-                  contentStyle={{ background: '#0f1a30', border: '1px solid #1e2d4d', borderRadius: 12 }}
-                  labelStyle={{ color: '#e8eefc' }}
+                  contentStyle={{ background: '#0b2341', border: '1px solid #193d68', borderRadius: 12 }}
+                  labelStyle={{ color: '#f5f7ff' }}
                 />
-                <Area type="monotone" dataKey="accuracy" stroke="#3b82f6" strokeWidth={2} fill="url(#ero-trend)" />
+                <Area type="monotone" dataKey="accuracy" stroke="#1678ff" strokeWidth={2} fill="url(#ero-trend)" dot={{ fill: '#168bff', r: 3 }} />
               </AreaChart>
             </ResponsiveContainer>
           </div>
@@ -115,7 +115,7 @@ export default function Progress() {
                     className="h-full rounded-full"
                     style={{
                       width: `${s.accuracy}%`,
-                      background: s.accuracy >= 70 ? '#22c55e' : s.accuracy >= 50 ? '#f59e0b' : '#ef4444',
+                      background: s.accuracy >= 70 ? '#12e6a5' : s.accuracy >= 50 ? '#ffb72c' : '#ff416d',
                     }}
                   />
                 </div>
@@ -132,17 +132,17 @@ export default function Progress() {
           <div className="h-56">
             <ResponsiveContainer width="100%" height="100%">
               <BarChart data={data.mock_scores.map((m, i) => ({ ...m, label: `#${i + 1}` }))}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#1e2d4d" />
-                <XAxis dataKey="label" tick={{ fill: '#93a3c0', fontSize: 11 }} />
-                <YAxis domain={[0, 100]} unit="%" tick={{ fill: '#93a3c0', fontSize: 11 }} />
+                <CartesianGrid strokeDasharray="3 3" stroke="#193d68" />
+                <XAxis dataKey="label" tick={{ fill: '#8398bb', fontSize: 11 }} />
+                <YAxis domain={[0, 100]} unit="%" tick={{ fill: '#8398bb', fontSize: 11 }} />
                 <Tooltip
-                  contentStyle={{ background: '#0f1a30', border: '1px solid #1e2d4d', borderRadius: 12 }}
-                  labelStyle={{ color: '#e8eefc' }}
+                  contentStyle={{ background: '#0b2341', border: '1px solid #193d68', borderRadius: 12 }}
+                  labelStyle={{ color: '#f5f7ff' }}
                   formatter={(v) => [`${v}%`, 'Accuracy']}
                 />
                 <Bar dataKey="accuracy" radius={[6, 6, 0, 0]}>
                   {data.mock_scores.map((m, i) => (
-                    <Cell key={i} fill={m.accuracy >= 70 ? '#22c55e' : m.accuracy >= 50 ? '#f59e0b' : '#ef4444'} />
+                    <Cell key={i} fill={m.accuracy >= 70 ? '#12e6a5' : m.accuracy >= 50 ? '#ffb72c' : '#ff416d'} />
                   ))}
                 </Bar>
               </BarChart>
