@@ -17,7 +17,11 @@ return Application::configure(basePath: dirname(__DIR__))
         apiPrefix: 'api',
     )
     ->withMiddleware(function (Middleware $middleware): void {
-        $middleware->statefulApi();
+        // The web SPA and mobile app authenticate with Sanctum PERSONAL ACCESS
+        // TOKENS (Authorization: Bearer ...), not cookie sessions. We therefore
+        // do NOT enable statefulApi()/CSRF for the API — enabling it caused
+        // "CSRF token mismatch" on token-based login. The token guard
+        // (auth:sanctum) still protects every authenticated route.
 
         // Centralised role gate aliases used across admin / super-admin routes.
         $middleware->alias([
