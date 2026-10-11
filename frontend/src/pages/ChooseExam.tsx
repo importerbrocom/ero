@@ -101,8 +101,15 @@ export default function ChooseExam() {
                 backgroundImage: `linear-gradient(120deg, ${p.accent_color}24 0%, var(--color-ero-card) 62%)`,
               }}
             >
+              {/* Landmark image slot (left), shown when the admin set a cover image */}
+              {p.cover_image_url && (
+                <div className="pointer-events-none absolute inset-y-0 left-0 w-32">
+                  <img src={p.cover_image_url} alt="" className="h-full w-full object-cover opacity-60" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-ero-card" />
+                </div>
+              )}
               <span className="absolute inset-x-0 top-0 h-1" style={{ background: p.accent_color }} />
-              <div className="flex items-start justify-between gap-3">
+              <div className={`relative flex items-start justify-between gap-3 ${p.cover_image_url ? 'pl-28' : ''}`}>
                 <div className="flex items-center gap-3">
                   <div className="text-3xl leading-none">{p.flag_emoji ?? '🎓'}</div>
                   <div>

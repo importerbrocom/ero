@@ -32,6 +32,7 @@ import AdminImport from './pages/admin/AdminImport'
 import AdminProgrammes from './pages/admin/AdminProgrammes'
 import AdminCodes from './pages/admin/AdminCodes'
 import AdminAudit from './pages/admin/AdminAudit'
+import AdminSettings from './pages/admin/AdminSettings'
 
 function RequireAuth({ children }: { children: React.ReactNode }) {
   const user = useAuth((s) => s.user)
@@ -120,6 +121,7 @@ export default function App() {
           <Route path="programmes" element={<AdminProgrammes />} />
           <Route path="codes" element={<AdminCodes />} />
           <Route path="audit" element={<AdminAudit />} />
+          <Route path="settings" element={<AdminSettings />} />
         </Route>
 
         <Route path="*" element={<Navigate to="/app" replace />} />

@@ -11,7 +11,7 @@ import {
   FileText,
   Layers,
 } from 'lucide-react'
-import { fetchAnalytics, fetchProgrammes } from '../lib/queries'
+import { fetchAnalytics, fetchProgrammes, fetchSettings } from '../lib/queries'
 import type { AnalyticsOverview, Programme } from '../types'
 import { Button, Card, EmptyState, HeroBanner, ProgressRing, Skeleton, StatCard } from '../components/ui'
 import { useAuth } from '../store/auth'
@@ -20,10 +20,12 @@ export default function Dashboard() {
   const user = useAuth((s) => s.user)
   const [programmes, setProgrammes] = useState<Programme[] | null>(null)
   const [analytics, setAnalytics] = useState<AnalyticsOverview | null>(null)
+  const [bannerUrl, setBannerUrl] = useState<string | null>(null)
 
   useEffect(() => {
     fetchProgrammes().then(setProgrammes)
     fetchAnalytics().then(setAnalytics).catch(() => setAnalytics(null))
+    fetchSettings().then((s) => setBannerUrl(s.welcome_banner_url)).catch(() => {})
   }, [])
 
   const accessible = programmes?.filter((p) => p.has_access) ?? []
@@ -33,6 +35,7 @@ export default function Dashboard() {
     <div className="mx-auto max-w-5xl space-y-6">
       {/* Welcome hero with monthly-goal progress (screenshot 4) */}
       <HeroBanner
+        image={bannerUrl ?? undefined}
         title={<>Welcome Back{user?.name ? `, ${user.name.split(' ')[0]}` : ''}!</>}
         subtitle={<span className="text-ero-text">Let's continue your preparation</span>}
       >

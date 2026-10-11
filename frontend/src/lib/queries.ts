@@ -126,3 +126,9 @@ export async function fetchLevelLadder(slug: string): Promise<LevelLadder> {
   const { data } = await api.get(`/programmes/${slug}/levels`)
   return data.data
 }
+
+// ---- Public site settings (welcome banner etc.) ----
+export async function fetchSettings(): Promise<{ welcome_banner_url: string | null }> {
+  const { data } = await api.get('/settings')
+  return data.data
+}

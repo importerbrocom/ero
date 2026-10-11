@@ -110,6 +110,27 @@ export const adminApi = {
     api.post(`/admin/imports/${importId}/commit`, { stored_path: storedPath }).then((r) => r.data),
 
   programmes: () => api.get('/admin/programmes').then((r) => r.data.data),
+  createProgramme: (payload: Record<string, unknown>) =>
+    api.post('/admin/programmes', payload).then((r) => r.data.data),
+  updateProgramme: (id: number, payload: Record<string, unknown>) =>
+    api.put(`/admin/programmes/${id}`, payload).then((r) => r.data.data),
+
+  // Image upload → returns { path, url }
+  uploadImage: (file: File, folder: 'programmes' | 'banners' | 'questions' | 'misc') => {
+    const fd = new FormData()
+    fd.append('image', file)
+    fd.append('folder', folder)
+    return api
+      .post<{ data: { path: string; url: string } }>('/admin/uploads', fd, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+      })
+      .then((r) => r.data.data)
+  },
+
+  // Site settings (welcome banner, etc.)
+  getSettings: () => api.get('/admin/settings').then((r) => r.data.data),
+  updateSettings: (payload: Record<string, unknown>) =>
+    api.put('/admin/settings', payload).then((r) => r.data.data),
 
   activationCodes: (params?: Record<string, unknown>) =>
     api.get<Paginated<AdminActivationCode>>('/admin/activation-codes', { params }).then((r) => r.data),

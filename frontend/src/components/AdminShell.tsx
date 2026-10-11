@@ -7,6 +7,7 @@ import {
   BookMarked,
   KeyRound,
   ScrollText,
+  Settings,
   LogOut,
 } from 'lucide-react'
 import { clsx } from 'clsx'
@@ -21,6 +22,7 @@ const nav = [
   { to: '/admin/programmes', label: 'Programmes', icon: BookMarked },
   { to: '/admin/codes', label: 'Activation Codes', icon: KeyRound },
   { to: '/admin/audit', label: 'Audit Logs', icon: ScrollText },
+  { to: '/admin/settings', label: 'Settings', icon: Settings },
 ]
 
 export function AdminShell() {

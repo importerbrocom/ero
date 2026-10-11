@@ -35,6 +35,9 @@ Route::get('/auth/verify-email/{id}/{hash}', [EmailVerificationController::class
 Route::get('/programmes', [ProgrammeController::class, 'index']);
 Route::get('/programmes/{programme}', [ProgrammeController::class, 'show']);
 
+// --- Public site settings (welcome banner image, etc.) ---
+Route::get('/settings', fn () => response()->json(['data' => \App\Models\Setting::publicSettings()]));
+
 // --- Authenticated (Sanctum) ---
 Route::middleware('auth:sanctum')->group(function () {
     Route::get('/auth/me', [AuthController::class, 'me']);
@@ -109,4 +112,11 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
 
     // Audit logs
     Route::get('/audit-logs', [Admin\AuditLogController::class, 'index']);
+
+    // Image uploads (programme covers, welcome banner, question images)
+    Route::post('/uploads', [Admin\UploadController::class, 'store']);
+
+    // Site settings (student welcome banner, etc.)
+    Route::get('/settings', [Admin\SettingsController::class, 'index']);
+    Route::put('/settings', [Admin\SettingsController::class, 'update']);
 });
