@@ -73,13 +73,14 @@ export default function ProgrammeDetail() {
       {/* Daily-practice hero (screenshot 2) */}
       {dailyExam && (
         <HeroBanner
-          variant="primary"
+          variant={programme.cover_image_url ? 'hero' : 'primary'}
+          image={programme.cover_image_url ?? undefined}
           eyebrow={`Crack ${programme.name} with`}
           title="Daily Practice"
           subtitle={`${perDay} questions every day. Monthly full-length mock test.`}
         >
           {programme.has_access ? (
-            <Button className="bg-white !text-ero-primary-600" onClick={() => startExam(dailyExam.id, dailyExam.type)}>
+            <Button onClick={() => startExam(dailyExam.id, dailyExam.type)}>
               <Play className="h-4 w-4" /> Continue Today's Quiz
             </Button>
           ) : (
