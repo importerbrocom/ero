@@ -65,6 +65,31 @@ class AdminMediaTest extends TestCase
         $this->assertEquals('https://ero.nokkoo.in/storage/uploads/programmes/bigben.jpg', $p->cover_image_url);
     }
 
+    public function test_admin_can_update_programme_by_numeric_id(): void
+    {
+        // Regression: ExamProgramme binds by slug for public URLs; the admin
+        // update route must bind by id ({programme:id}) since the admin UI
+        // sends the numeric id. Previously this 404'd ("No query results").
+        $admin = User::factory()->create(['role' => 'admin']);
+        $programme = ExamProgramme::create([
+            'slug' => 'fmge', 'name' => 'FMGE', 'full_name' => 'FMGE',
+            'config' => [], 'status' => 'published',
+        ]);
+
+        $this->actingAs($admin)
+            ->putJson("/api/v1/admin/programmes/{$programme->id}", [
+                'name' => 'FMGE',
+                'full_name' => 'Foreign Medical Graduate Examination',
+                'cover_image_url' => 'https://ero.nokkoo.in/storage/uploads/programmes/indiagate.jpg',
+            ])
+            ->assertOk();
+
+        $this->assertEquals(
+            'https://ero.nokkoo.in/storage/uploads/programmes/indiagate.jpg',
+            $programme->fresh()->cover_image_url,
+        );
+    }
+
     public function test_welcome_banner_setting_roundtrip_and_public_read(): void
     {
         $admin = User::factory()->create(['role' => 'admin']);

@@ -102,8 +102,10 @@ Route::middleware(['auth:sanctum', 'role:admin'])->prefix('admin')->group(functi
     // Programmes & exam configuration
     Route::get('/programmes', [Admin\ProgrammeAdminController::class, 'index']);
     Route::post('/programmes', [Admin\ProgrammeAdminController::class, 'store']);
-    Route::put('/programmes/{programme}', [Admin\ProgrammeAdminController::class, 'update']);
-    Route::post('/programmes/{programme}/exams', [Admin\ProgrammeAdminController::class, 'upsertExam']);
+    // Bind by id (ExamProgramme::getRouteKeyName() is 'slug' for public URLs,
+    // but the admin UI sends numeric ids — {programme:id} overrides that here).
+    Route::put('/programmes/{programme:id}', [Admin\ProgrammeAdminController::class, 'update']);
+    Route::post('/programmes/{programme:id}/exams', [Admin\ProgrammeAdminController::class, 'upsertExam']);
 
     // Activation codes
     Route::get('/activation-codes', [Admin\ActivationCodeController::class, 'index']);
