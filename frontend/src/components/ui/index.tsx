@@ -265,6 +265,8 @@ export function HeroBanner({
   subtitle,
   image,
   coverImage = false,
+  imageFit = 'cover',
+  imagePosition = 'center',
   children,
   className,
 }: {
@@ -276,6 +278,10 @@ export function HeroBanner({
   /** When true, the image covers the FULL banner (background) instead of the
    *  right-half slot. A left→right dark gradient keeps the text readable. */
   coverImage?: boolean
+  /** 'cover' fills the banner (may crop); 'contain' shows the whole image. */
+  imageFit?: 'cover' | 'contain'
+  /** CSS object-position focal point for cover mode (e.g. 'center 30%'). */
+  imagePosition?: string
   children?: ReactNode
   className?: string
 }) {
@@ -292,9 +298,14 @@ export function HeroBanner({
       {/* Image slot. Full-cover background (coverImage) or right-half slot. */}
       {image && coverImage && (
         <div className="pointer-events-none absolute inset-0">
-          <img src={image} alt="" className="h-full w-full object-cover" />
+          <img
+            src={image}
+            alt=""
+            className={clsx('h-full w-full', imageFit === 'contain' ? 'object-contain' : 'object-cover')}
+            style={{ objectPosition: imagePosition }}
+          />
           {/* Readability gradient: strong on the left (behind text), clear on the right. */}
-          <div className="absolute inset-0 bg-gradient-to-r from-ero-bg/95 via-ero-bg/70 to-ero-bg/25" />
+          <div className="absolute inset-0 bg-gradient-to-r from-ero-bg/95 via-ero-bg/70 to-ero-bg/20" />
         </div>
       )}
       {image && !coverImage && (
