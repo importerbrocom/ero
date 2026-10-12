@@ -103,13 +103,14 @@ export default function ChooseExam() {
             >
               {/* Landmark image slot (left), shown when the admin set a cover image */}
               {p.cover_image_url && (
-                <div className="pointer-events-none absolute inset-y-0 left-0 w-32">
-                  <img src={p.cover_image_url} alt="" className="h-full w-full object-cover opacity-60" />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent to-ero-card" />
+                <div className="pointer-events-none absolute inset-y-0 left-0 w-44">
+                  <img src={p.cover_image_url} alt="" className="h-full w-full object-cover" />
+                  {/* slim right-edge blend only, so the landmark stays clear */}
+                  <div className="absolute inset-y-0 right-0 w-16 bg-gradient-to-r from-transparent to-ero-card" />
                 </div>
               )}
               <span className="absolute inset-x-0 top-0 h-1" style={{ background: p.accent_color }} />
-              <div className={`relative flex items-start justify-between gap-3 ${p.cover_image_url ? 'pl-28' : ''}`}>
+              <div className={`relative flex items-start justify-between gap-3 ${p.cover_image_url ? 'pl-40' : ''}`}>
                 <div className="flex items-center gap-3">
                   <FlagMark imageUrl={p.flag_image_url} emoji={p.flag_emoji} size={34} />
                   <div>
