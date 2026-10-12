@@ -75,6 +75,7 @@ export default function ProgrammeDetail() {
         <HeroBanner
           variant={programme.cover_image_url ? 'hero' : 'primary'}
           image={programme.cover_image_url ?? undefined}
+          coverImage
           eyebrow={`Crack ${programme.name} with`}
           title="Daily Practice"
           subtitle={`${perDay} questions every day. Monthly full-length mock test.`}
