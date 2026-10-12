@@ -36,6 +36,7 @@ export default function Dashboard() {
       {/* Welcome hero with monthly-goal progress (screenshot 4) */}
       <HeroBanner
         image={bannerUrl ?? undefined}
+        coverImage
         title={<>Welcome Back{user?.name ? `, ${user.name.split(' ')[0]}` : ''}!</>}
         subtitle={<span className="text-ero-text">Let's continue your preparation</span>}
       >

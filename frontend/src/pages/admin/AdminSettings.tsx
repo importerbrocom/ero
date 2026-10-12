@@ -55,15 +55,15 @@ export default function AdminSettings() {
           </p>
         </div>
 
-        {/* Live preview matching the student hero */}
+        {/* Live preview matching the student hero (full-cover background) */}
         <div className="relative h-40 w-full overflow-hidden rounded-2xl border border-ero-border ero-grad-hero">
           {bannerUrl && (
             <>
               <img src={bannerUrl} alt="" className="absolute inset-0 h-full w-full object-cover" />
-              <div className="absolute inset-0 bg-gradient-to-r from-ero-bg/90 via-ero-bg/40 to-transparent" />
+              <div className="absolute inset-0 bg-gradient-to-r from-ero-bg/95 via-ero-bg/70 to-ero-bg/25" />
             </>
           )}
-          <div className="relative z-10 p-5">
+          <div className="relative z-10 max-w-[65%] p-5">
             <div className="text-xl font-extrabold text-white">Welcome Back!</div>
             <div className="text-sm text-ero-muted">Let's continue your preparation</div>
           </div>

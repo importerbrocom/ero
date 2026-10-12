@@ -264,6 +264,7 @@ export function HeroBanner({
   title,
   subtitle,
   image,
+  coverImage = false,
   children,
   className,
 }: {
@@ -272,6 +273,9 @@ export function HeroBanner({
   title: ReactNode
   subtitle?: ReactNode
   image?: string
+  /** When true, the image covers the FULL banner (background) instead of the
+   *  right-half slot. A left→right dark gradient keeps the text readable. */
+  coverImage?: boolean
   children?: ReactNode
   className?: string
 }) {
@@ -285,14 +289,21 @@ export function HeroBanner({
         className,
       )}
     >
-      {/* Right-side image slot (photographic → object-cover). */}
-      {image && (
+      {/* Image slot. Full-cover background (coverImage) or right-half slot. */}
+      {image && coverImage && (
+        <div className="pointer-events-none absolute inset-0">
+          <img src={image} alt="" className="h-full w-full object-cover" />
+          {/* Readability gradient: strong on the left (behind text), clear on the right. */}
+          <div className="absolute inset-0 bg-gradient-to-r from-ero-bg/95 via-ero-bg/70 to-ero-bg/25" />
+        </div>
+      )}
+      {image && !coverImage && (
         <div className="pointer-events-none absolute inset-y-0 right-0 w-1/2">
           <img src={image} alt="" className="h-full w-full object-cover opacity-80" />
           <div className="absolute inset-0 bg-gradient-to-r from-ero-bg/90 via-ero-bg/30 to-transparent" />
         </div>
       )}
-      <div className="relative z-10 max-w-[70%] p-6">
+      <div className={clsx('relative z-10 p-6', coverImage ? 'max-w-[65%]' : 'max-w-[70%]')}>
         {eyebrow && (
           <div className="mb-1 text-xs font-semibold uppercase tracking-widest text-ero-muted">
             {eyebrow}
