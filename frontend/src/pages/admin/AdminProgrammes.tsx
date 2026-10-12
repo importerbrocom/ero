@@ -11,6 +11,7 @@ interface AdminProgramme {
   slug: string
   status: string
   flag_emoji: string | null
+  flag_image_url?: string | null
   accent_color?: string | null
   cover_image_url?: string | null
   country?: string | null
@@ -27,6 +28,7 @@ type FormState = {
   full_name: string
   country: string
   flag_emoji: string
+  flag_image_url: string
   accent_color: string
   description: string
   cover_image_url: string
@@ -34,7 +36,7 @@ type FormState = {
 }
 
 const EMPTY: FormState = {
-  name: '', slug: '', full_name: '', country: '', flag_emoji: '',
+  name: '', slug: '', full_name: '', country: '', flag_emoji: '', flag_image_url: '',
   accent_color: '#086BFF', description: '', cover_image_url: '', status: 'draft',
 }
 
@@ -54,6 +56,7 @@ export default function AdminProgrammes() {
       full_name: p.full_name,
       country: p.country ?? '',
       flag_emoji: p.flag_emoji ?? '',
+      flag_image_url: p.flag_image_url ?? '',
       accent_color: p.accent_color ?? '#086BFF',
       description: p.description ?? '',
       cover_image_url: p.cover_image_url ?? '',
@@ -141,6 +144,8 @@ function ProgrammeForm({
 
   const set = (k: keyof FormState) => (v: string) => setForm((f) => ({ ...f, [k]: v }))
 
+  const [flagUploading, setFlagUploading] = useState(false)
+
   const upload = async (file: File) => {
     setUploading(true)
     setError(null)
@@ -154,6 +159,19 @@ function ProgrammeForm({
     }
   }
 
+  const uploadFlag = async (file: File) => {
+    setFlagUploading(true)
+    setError(null)
+    try {
+      const res = await adminApi.uploadImage(file, 'flags')
+      setForm((f) => ({ ...f, flag_image_url: res.url }))
+    } catch (e) {
+      setError((e as ApiError).message)
+    } finally {
+      setFlagUploading(false)
+    }
+  }
+
   const save = async () => {
     setSaving(true)
     setError(null)
@@ -163,6 +181,7 @@ function ProgrammeForm({
         full_name: form.full_name,
         country: form.country || null,
         flag_emoji: form.flag_emoji || null,
+        flag_image_url: form.flag_image_url || null,
         accent_color: form.accent_color,
         description: form.description || null,
         cover_image_url: form.cover_image_url || null,
@@ -189,7 +208,7 @@ function ProgrammeForm({
         <div className="mb-4">
           <span className="mb-1.5 block text-sm font-medium text-ero-muted">Cover image (landmark / banner)</span>
           <div className="flex items-center gap-3">
-            <div className="h-20 w-32 shrink-0 overflow-hidden rounded-xl border border-ero-border bg-ero-bg-2">
+            <div className="h-20 w-36 shrink-0 overflow-hidden rounded-xl border border-ero-border bg-ero-bg-2">
               {form.cover_image_url ? (
                 <img src={form.cover_image_url} alt="" className="h-full w-full object-cover" />
               ) : (
@@ -211,7 +230,45 @@ function ProgrammeForm({
               />
             </label>
           </div>
-          <p className="mt-1 text-xs text-ero-faint">JPG, PNG, WEBP or SVG · up to 5 MB.</p>
+          <p className="mt-1 text-xs text-ero-faint">
+            Recommended <b>800 × 400 px</b> (landscape, 2:1). JPG / PNG / WEBP · up to 5 MB.
+          </p>
+        </div>
+
+        {/* Flag image uploader (optional — overrides the emoji) */}
+        <div className="mb-4">
+          <span className="mb-1.5 block text-sm font-medium text-ero-muted">Flag image (optional — circular flag/badge)</span>
+          <div className="flex items-center gap-3">
+            <div className="h-14 w-14 shrink-0 overflow-hidden rounded-full border border-ero-border bg-ero-bg-2">
+              {form.flag_image_url ? (
+                <img src={form.flag_image_url} alt="" className="h-full w-full object-cover" />
+              ) : (
+                <div className="flex h-full w-full items-center justify-center text-xl">
+                  {form.flag_emoji || '🏳️'}
+                </div>
+              )}
+            </div>
+            <label className="cursor-pointer">
+              <span className="inline-flex items-center gap-2 rounded-xl border border-ero-border bg-ero-input px-4 py-2.5 text-sm font-semibold">
+                {flagUploading ? <Loader2 className="h-4 w-4 animate-spin" /> : <ImagePlus className="h-4 w-4" />}
+                {form.flag_image_url ? 'Replace' : 'Upload'} flag
+              </span>
+              <input
+                type="file"
+                accept="image/*"
+                className="hidden"
+                onChange={(e) => e.target.files?.[0] && uploadFlag(e.target.files[0])}
+              />
+            </label>
+            {form.flag_image_url && (
+              <Button variant="ghost" className="text-ero-danger" onClick={() => set('flag_image_url')('')}>
+                Remove
+              </Button>
+            )}
+          </div>
+          <p className="mt-1 text-xs text-ero-faint">
+            Recommended <b>128 × 128 px</b> (square). PNG / WEBP / SVG · up to 5 MB. If no image is set, the flag emoji is used.
+          </p>
         </div>
 
         <div className="grid gap-3 sm:grid-cols-2">

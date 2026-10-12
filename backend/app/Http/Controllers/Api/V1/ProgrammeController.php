@@ -78,6 +78,7 @@ class ProgrammeController extends Controller
             'full_name' => $p->full_name,
             'country' => $p->country,
             'flag_emoji' => $p->flag_emoji,
+            'flag_image_url' => $p->flag_image_url,
             'description' => $p->description,
             'accent_color' => $p->accent_color,
             'cover_image_url' => $p->cover_image_url,

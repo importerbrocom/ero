@@ -432,3 +432,26 @@ export function StatCard({
     </Card>
   )
 }
+
+/** Programme flag: circular uploaded image if present, else the emoji. */
+export function FlagMark({
+  imageUrl,
+  emoji,
+  size = 28,
+}: {
+  imageUrl?: string | null
+  emoji?: string | null
+  size?: number
+}) {
+  if (imageUrl) {
+    return (
+      <img
+        src={imageUrl}
+        alt=""
+        className="shrink-0 rounded-full object-cover"
+        style={{ width: size, height: size }}
+      />
+    )
+  }
+  return <span style={{ fontSize: size * 0.9, lineHeight: 1 }}>{emoji ?? '🎓'}</span>
+}

@@ -19,7 +19,7 @@ class UploadController extends Controller
     {
         $data = $request->validate([
             'image' => ['required', 'image', 'mimes:jpeg,jpg,png,webp,gif,svg', 'max:5120'], // 5 MB
-            'folder' => ['nullable', 'string', 'in:programmes,banners,questions,misc'],
+            'folder' => ['nullable', 'string', 'in:programmes,flags,banners,questions,misc'],
         ]);
 
         $folder = $data['folder'] ?? 'misc';

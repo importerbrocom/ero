@@ -18,6 +18,7 @@ export interface Programme {
   full_name: string
   country: string | null
   flag_emoji: string | null
+  flag_image_url: string | null
   description: string | null
   accent_color: string
   cover_image_url: string | null

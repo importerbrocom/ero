@@ -116,7 +116,7 @@ export const adminApi = {
     api.put(`/admin/programmes/${id}`, payload).then((r) => r.data.data),
 
   // Image upload → returns { path, url }
-  uploadImage: (file: File, folder: 'programmes' | 'banners' | 'questions' | 'misc') => {
+  uploadImage: (file: File, folder: 'programmes' | 'flags' | 'banners' | 'questions' | 'misc') => {
     const fd = new FormData()
     fd.append('image', file)
     fd.append('folder', folder)

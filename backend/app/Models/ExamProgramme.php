@@ -12,7 +12,7 @@ class ExamProgramme extends Model
     use SoftDeletes;
 
     protected $fillable = [
-        'slug', 'name', 'full_name', 'country', 'flag_emoji',
+        'slug', 'name', 'full_name', 'country', 'flag_emoji', 'flag_image_url',
         'description', 'accent_color', 'cover_image_url', 'config',
         'status', 'sort_order',
     ];

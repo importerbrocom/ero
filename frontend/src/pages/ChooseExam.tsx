@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom'
 import { ArrowRight, Lock, Search, Unlock } from 'lucide-react'
 import { fetchProgrammes, redeemCode } from '../lib/queries'
 import type { Programme } from '../types'
-import { Badge, Button, Card, Input, Skeleton } from '../components/ui'
+import { Badge, Button, Card, FlagMark, Input, Skeleton } from '../components/ui'
 import type { ApiError } from '../lib/api'
 
 export default function ChooseExam() {
@@ -111,7 +111,7 @@ export default function ChooseExam() {
               <span className="absolute inset-x-0 top-0 h-1" style={{ background: p.accent_color }} />
               <div className={`relative flex items-start justify-between gap-3 ${p.cover_image_url ? 'pl-28' : ''}`}>
                 <div className="flex items-center gap-3">
-                  <div className="text-3xl leading-none">{p.flag_emoji ?? '🎓'}</div>
+                  <FlagMark imageUrl={p.flag_image_url} emoji={p.flag_emoji} size={34} />
                   <div>
                     <div className="flex items-center gap-2">
                       <h3 className="text-lg font-bold text-white">{p.name}</h3>

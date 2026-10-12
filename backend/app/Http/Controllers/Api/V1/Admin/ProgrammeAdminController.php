@@ -30,6 +30,7 @@ class ProgrammeAdminController extends Controller
             'description' => ['nullable', 'string'],
             'accent_color' => ['nullable', 'string'],
             'cover_image_url' => ['nullable', 'string', 'max:2048'],
+            'flag_image_url' => ['nullable', 'string', 'max:2048'],
             'config' => ['nullable', 'array'],
             'status' => ['nullable', 'in:draft,published,archived'],
         ]);
@@ -53,6 +54,7 @@ class ProgrammeAdminController extends Controller
             'description' => ['nullable', 'string'],
             'accent_color' => ['nullable', 'string'],
             'cover_image_url' => ['nullable', 'string', 'max:2048'],
+            'flag_image_url' => ['nullable', 'string', 'max:2048'],
             'config' => ['sometimes', 'array'],
             'status' => ['sometimes', 'in:draft,published,archived'],
             'sort_order' => ['sometimes', 'integer'],
