@@ -304,13 +304,14 @@ export function HeroBanner({
             className={clsx('h-full w-full', imageFit === 'contain' ? 'object-contain object-right' : 'object-cover')}
             style={{ objectPosition: imagePosition }}
           />
-          {/* Readability gradient. For 'contain' keep the right side clear so the
-              full image shows; for 'cover' fade across the whole banner. */}
+          {/* Readability gradient that FEATHERS into the image (no hard edge):
+              solid behind the text, then a long smooth fade across the middle
+              so the image blends seamlessly into the banner. */}
           <div
             className={clsx(
               'absolute inset-0',
               imageFit === 'contain'
-                ? 'bg-gradient-to-r from-ero-bg via-ero-bg/85 via-40% to-transparent'
+                ? 'bg-gradient-to-r from-ero-bg from-15% via-ero-bg/60 via-55% to-transparent to-85%'
                 : 'bg-gradient-to-r from-ero-bg/95 via-ero-bg/70 to-ero-bg/20',
             )}
           />
