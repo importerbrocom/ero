@@ -301,11 +301,19 @@ export function HeroBanner({
           <img
             src={image}
             alt=""
-            className={clsx('h-full w-full', imageFit === 'contain' ? 'object-contain' : 'object-cover')}
+            className={clsx('h-full w-full', imageFit === 'contain' ? 'object-contain object-right' : 'object-cover')}
             style={{ objectPosition: imagePosition }}
           />
-          {/* Readability gradient: strong on the left (behind text), clear on the right. */}
-          <div className="absolute inset-0 bg-gradient-to-r from-ero-bg/95 via-ero-bg/70 to-ero-bg/20" />
+          {/* Readability gradient. For 'contain' keep the right side clear so the
+              full image shows; for 'cover' fade across the whole banner. */}
+          <div
+            className={clsx(
+              'absolute inset-0',
+              imageFit === 'contain'
+                ? 'bg-gradient-to-r from-ero-bg via-ero-bg/85 via-40% to-transparent'
+                : 'bg-gradient-to-r from-ero-bg/95 via-ero-bg/70 to-ero-bg/20',
+            )}
+          />
         </div>
       )}
       {image && !coverImage && (

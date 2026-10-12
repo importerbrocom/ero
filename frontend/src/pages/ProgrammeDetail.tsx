@@ -76,8 +76,9 @@ export default function ProgrammeDetail() {
           variant={programme.cover_image_url ? 'hero' : 'primary'}
           image={programme.cover_image_url ?? undefined}
           coverImage
-          imagePosition="center 35%"
-          className="min-h-[200px]"
+          imageFit="contain"
+          imagePosition="right center"
+          className="min-h-[220px]"
           eyebrow={`Crack ${programme.name} with`}
           title="Daily Practice"
           subtitle={`${perDay} questions every day. Monthly full-length mock test.`}
