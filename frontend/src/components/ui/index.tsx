@@ -433,7 +433,30 @@ export function StatCard({
   )
 }
 
-/** Programme flag: circular uploaded image if present, else the emoji. */
+/**
+ * Convert a value stored in `flag_emoji` into a displayable flag.
+ * - If it's already an emoji (🇮🇳), return as-is.
+ * - If it's a 2-letter ISO country code ("IN", "us"), convert to the regional-
+ *   indicator flag emoji (🇮🇳). This fixes data stored as plain "IN"/"US".
+ */
+export function toFlagEmoji(value?: string | null): string {
+  if (!value) return '🎓'
+  const v = value.trim()
+  // Already contains an emoji / non-ASCII glyph → use it directly.
+  // eslint-disable-next-line no-control-regex
+  if (/[^\u0000-\u007F]/.test(v)) return v
+  // Plain 2-letter code → regional indicator symbols.
+  if (/^[A-Za-z]{2}$/.test(v)) {
+    const cc = v.toUpperCase()
+    return String.fromCodePoint(
+      0x1f1e6 + (cc.charCodeAt(0) - 65),
+      0x1f1e6 + (cc.charCodeAt(1) - 65),
+    )
+  }
+  return v
+}
+
+/** Programme flag: circular uploaded image if present, else the (coerced) emoji. */
 export function FlagMark({
   imageUrl,
   emoji,
@@ -453,5 +476,5 @@ export function FlagMark({
       />
     )
   }
-  return <span style={{ fontSize: size * 0.9, lineHeight: 1 }}>{emoji ?? '🎓'}</span>
+  return <span style={{ fontSize: size * 0.9, lineHeight: 1 }}>{toFlagEmoji(emoji)}</span>
 }

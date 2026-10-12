@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Plus, Pencil, ImagePlus, Loader2 } from 'lucide-react'
 import { adminApi } from '../../lib/adminApi'
-import { Badge, Button, Card, Input, Skeleton } from '../../components/ui'
+import { Badge, Button, Card, FlagMark, Input, Skeleton, toFlagEmoji } from '../../components/ui'
 import type { ApiError } from '../../lib/api'
 
 interface AdminProgramme {
@@ -95,7 +95,7 @@ export default function AdminProgrammes() {
               <div className="p-4 pt-0">
                 <div className="flex items-center justify-between">
                   <div className="flex items-center gap-2">
-                    <span className="text-2xl">{p.flag_emoji ?? '🎓'}</span>
+                    <FlagMark imageUrl={p.flag_image_url} emoji={p.flag_emoji} size={26} />
                     <div>
                       <div className="font-bold">{p.name}</div>
                       <div className="text-xs text-ero-muted">{p.full_name}</div>
@@ -244,7 +244,7 @@ function ProgrammeForm({
                 <img src={form.flag_image_url} alt="" className="h-full w-full object-cover" />
               ) : (
                 <div className="flex h-full w-full items-center justify-center text-xl">
-                  {form.flag_emoji || '🏳️'}
+                  {toFlagEmoji(form.flag_emoji)}
                 </div>
               )}
             </div>

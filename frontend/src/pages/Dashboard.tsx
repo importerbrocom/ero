@@ -13,7 +13,7 @@ import {
 } from 'lucide-react'
 import { fetchAnalytics, fetchProgrammes, fetchSettings } from '../lib/queries'
 import type { AnalyticsOverview, Programme } from '../types'
-import { Button, Card, EmptyState, HeroBanner, ProgressRing, Skeleton, StatCard } from '../components/ui'
+import { Button, Card, EmptyState, FlagMark, HeroBanner, ProgressRing, Skeleton, StatCard } from '../components/ui'
 import { useAuth } from '../store/auth'
 
 export default function Dashboard() {
@@ -130,7 +130,7 @@ export default function Dashboard() {
                 style={{ backgroundImage: `linear-gradient(120deg, ${p.accent_color}1f 0%, var(--color-ero-card) 60%)` }}
               >
                 <div className="flex items-center gap-3">
-                  <span className="text-2xl">{p.flag_emoji}</span>
+                  <FlagMark imageUrl={p.flag_image_url} emoji={p.flag_emoji} size={28} />
                   <div>
                     <div className="font-semibold text-white">{p.name}</div>
                     <div className="text-xs text-ero-muted">

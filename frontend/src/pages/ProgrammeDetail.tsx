@@ -11,7 +11,7 @@ import {
 } from 'lucide-react'
 import { fetchProgramme, fetchAnalytics } from '../lib/queries'
 import type { AnalyticsOverview, ProgrammeDetail as PD } from '../types'
-import { Badge, Button, Card, HeroBanner, Skeleton, StatCard, SubjectTile, Tabs } from '../components/ui'
+import { Badge, Button, Card, FlagMark, HeroBanner, Skeleton, StatCard, SubjectTile, Tabs } from '../components/ui'
 
 type TabKey = 'overview' | 'mocks' | 'subjects'
 
@@ -56,7 +56,7 @@ export default function ProgrammeDetail() {
     <div className="mx-auto max-w-4xl space-y-5">
       {/* Programme header */}
       <div className="flex items-center gap-3">
-        <span className="text-4xl">{programme.flag_emoji}</span>
+        <FlagMark imageUrl={programme.flag_image_url} emoji={programme.flag_emoji} size={40} />
         <div>
           <h1 className="text-2xl font-extrabold text-white">{programme.name}</h1>
           <p className="text-sm text-ero-muted">{programme.full_name}</p>
